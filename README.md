@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Android application enables users to search for images using the Pixabay API and view detailed information about selected images. The app provides a clean and responsive UI built with Jetpack Compose, manages dependencies with Hilt, and leverages modern libraries for networking and image loading.
+This Android application enables users to search for images using the Pixabay API and view detailed information about selected images. The app provides a clean and responsive UI built with Jetpack Compose, manages dependencies with Hilt, and leverages modern libraries for networking and image loading. It supports configuration changes and adapts to both light and dark modes seamlessly. UI tests have been integrated to ensure a consistent and reliable user experience.
 
 ## Features
 
@@ -10,8 +10,11 @@ This Android application enables users to search for images using the Pixabay AP
 - **Image Thumbnail**: Displays a grid of image thumbnails.
 - **Image Details**: Clicking on a thumbnail shows a dialog box asking for user confirmation to view details.
 - **Offline Caching**: Server responses are cached in storage for offline access.
-- **Default Search**: On app startup, a default search query is performed to populate the initial image list.
+- **Default Search**: On app startup, a default search query with the term “fruits” is performed to populate the initial image list.
 - **Detailed View**: Upon user confirmation, the app navigates to a detail screen showcasing the selected image.
+- **Configuration Changes**: The app efficiently handles configuration changes, such as screen rotations, ensuring that user state is preserved and the UI is updated accordingly.
+- **Night/Light Mode Support**: The app adapts to the system's light or dark mode settings, providing a consistent and visually appealing experience across different themes.
+- **UI Testing**: UI tests are included to validate the interface's functionality and ensure that it behaves correctly under various conditions.
 
 ## Dependencies
 
@@ -39,10 +42,9 @@ Here’s a summary of the key dependencies used in the project:
 
 - **Ktor** (planned): A framework for making HTTP requests, which will be used in place of Retrofit to provide consistency across multiple platforms when adopting KMM.
 
-
 ## Usage
 
-1. **Search Images**: On app launch, a default search query is executed. Users can modify the query to search for different images.
+1. **Search Images**: On app launch, a default search query with the term “fruits” is executed. Users can modify the query to search for different images.
 2. **View Thumbnails**: The app displays thumbnails of the searched images.
 3. **Image Details**: Clicking a thumbnail brings up a dialog box for user confirmation. If confirmed, the app navigates to a detailed view of the selected image.
 
