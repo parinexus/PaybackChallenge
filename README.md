@@ -15,56 +15,30 @@ This Android application enables users to search for images using the Pixabay AP
 
 ## Dependencies
 
-The project utilizes the following dependencies:
+Here’s a summary of the key dependencies used in the project:
 
-### Compose UI
-- `androidx.compose.runtime:runtime:1.3.3`
-- `androidx.compose.ui:ui:1.3.3`
-- `androidx.compose.material:material:1.3.1`
-- `androidx.activity:activity-compose:1.6.1`
-- `androidx.core:core-splashscreen:1.1.0-rc01`
-- `com.google.accompanist:accompanist-flowlayout:0.29.2-rc`
+- **Jetpack Compose**: Used for building the UI. It enables a declarative way of designing UIs, allowing you to define how the UI should look and behave based on the app's state.
 
-### Room Database
-- `androidx.room:room-runtime:2.5.0`
-- `androidx.room:room-ktx:2.5.0`
-- `kapt "androidx.room:room-compiler:2.5.0"`
+- **Room**: A persistence library that provides an abstraction layer over SQLite to allow for more robust database access while harnessing the full power of SQLite. It is used for offline caching of data.
 
-### Hilt Dependency Injection
-- `com.google.dagger:hilt-android:2.42`
-- `androidx.hilt:hilt-navigation-compose:1.0.0`
-- `kapt 'com.google.dagger:hilt-android-compiler:2.42'`
-- `kapt "androidx.hilt:hilt-compiler:1.0.0"`
+- **Hilt**: A dependency injection library that simplifies the process of providing dependencies in Android applications. Hilt is used in this project to manage dependencies like network clients, repositories, and other components.
 
-### Coroutines
-- `org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4`
+- **Kotlin Coroutines**: Used for managing background tasks and asynchronous operations. Coroutines simplify asynchronous programming by providing a more readable and maintainable way to handle tasks like network requests or database operations.
 
-### Retrofit for Networking
-- `com.squareup.retrofit2:retrofit:2.9.0`
-- `com.squareup.retrofit2:converter-gson:2.9.0`
+- **Retrofit**: A type-safe HTTP client used for making network requests to the Pixabay API. Retrofit simplifies the process of connecting to REST APIs and handling responses.
 
-### OkHttp3
-- `com.squareup.okhttp3:okhttp-bom:4.9.1`
-- `com.squareup.okhttp3:okhttp`
-- `com.squareup.okhttp3:logging-interceptor`
+- **OkHttp**: A powerful HTTP client that works with Retrofit. It's used for making network requests, with an added logging interceptor for debugging purposes.
 
-### Navigation
-- `androidx.navigation:navigation-compose:2.5.3`
+- **Navigation Component**: This handles in-app navigation and provides a framework for navigating between different screens in the app.
 
-### Image Loading
-- `io.coil-kt:coil-compose:2.1.0`
-- `io.coil-kt:coil-svg:2.1.0`
+- **Coil**: An image loading library used to load and display images from the web. Coil is optimized for Android and integrates well with Jetpack Compose.
 
-### Testing
-- `testImplementation "junit:junit:4.13.2"`
-- `testImplementation "org.mockito:mockito-core:5.0.0"`
-- `testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'`
-- `testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"`
-- `testImplementation "androidx.arch.core:core-testing:2.2.0"`
+- **JUnit and Mockito**: Testing libraries used for writing unit tests and mocking dependencies to ensure the correctness of the application logic.
 
-### Instrumented Testing
-- `androidTestImplementation 'androidx.test.ext:junit:1.1.5'`
-- `androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"`
+- **Kotlin Multiplatform Mobile (KMM)** (planned): To share code between Android and iOS, particularly for business logic and network communication.
+
+- **Ktor** (planned): A framework for making HTTP requests, which will be used in place of Retrofit to provide consistency across multiple platforms when adopting KMM.
+
 
 ## Usage
 
