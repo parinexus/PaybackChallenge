@@ -77,6 +77,8 @@ The project utilizes the following dependencies:
 - **Add Chucker**: Integrate Chucker to visualize and inspect network requests and responses.
 - **Enhance Testing**: Expand test coverage to ensure robust application functionality and reliability.
 - **Migrate to Kotlin Script (KTS)**: Refactor the Gradle build files to Kotlin Script (KTS) for better type safety and tooling support. Organize dependencies in a centralized manner to improve maintainability.
+- **Adopt Kotlin Multiplatform Mobile (KMM)**: Leverage Kotlin Multiplatform Mobile (KMM) to share code between Android and iOS, specifically focusing on business logic and network communication.
+- **Integrate Ktor**: Replace Retrofit with Ktor for network requests, providing a more consistent experience across multiple platforms when using KMM.
 
 ## Contribution
 
