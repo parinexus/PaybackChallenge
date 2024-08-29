@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PixaBay</string>
+    <string name="detail_screen_warning_dialog">Are you sure, you want to see the %1s details?</string>
+    <string name="error_generic">An error occurred</string>
+    <string name="no_data_available">No data available</string>
+    <string name="retry_prompt">Tap to retry</string>
+    <string name="back_navigation">Back</string>
+    <string name="details_confirmation_message_warning_dialog">Are you sure you want to view the details of %1s?</string>
+    <string name="details_warning_dialog_positive_text">Yes</string>
+    <string name="details_warning_dialog_negative_text">No</string>
+    <string name="origin">Origin:</string>
+    <string name="source_website">https://pixabay.com</string>
+    <string name="error_title">Oops!</string>
+</resources>
