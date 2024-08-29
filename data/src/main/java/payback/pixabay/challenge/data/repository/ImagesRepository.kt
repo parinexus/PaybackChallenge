@@ -6,7 +6,7 @@ import payback.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMappe
 import payback.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
 import payback.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
 import payback.pixabay.challenge.data.mapper.MapperInput
-import payback.pixabay.challenge.domain.model.ImageDataModelInDomain
+import payback.pixabay.challenge.domain.model.ImageDomainModel
 import payback.pixabay.challenge.domain.repository.ImageRepository
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class ImagesDataRepository @Inject constructor(
     private val imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper,
     private val imageDbModelToDomainModelMapper: ImageDbModelToDomainModelMapper
 ) : ImageRepository {
-    override suspend fun fetchImages(query: String): List<ImageDataModelInDomain> {
+    override suspend fun fetchImages(query: String): List<ImageDomainModel> {
         val localData = imageRepositoryDao.fetchImagesByQuery(query)
         return when {
             localData.isNullOrEmpty() -> {
@@ -35,7 +35,7 @@ class ImagesDataRepository @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndPersistData(query: String): List<ImageDataModelInDomain> {
+    private suspend fun fetchAndPersistData(query: String): List<ImageDomainModel> {
         val imagesApiResponse = imageApiService.fetchImages(query = query)
         imagesApiResponse.images?.map { apiImageDetail ->
             imageNetworkModelToDbModelMapper.toDatabase(

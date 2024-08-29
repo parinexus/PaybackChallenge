@@ -6,12 +6,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import payback.pixabay.challenge.data.datastore.local.ImageDataModel
-import payback.pixabay.challenge.domain.model.ImageDataModelInDomain
+import payback.pixabay.challenge.domain.model.ImageDomainModel
 
 @RunWith(Parameterized::class)
 class ImageDbModelToDomainMapper(
     private val input: ImageDataModel,
-    private val expectedResult: ImageDataModelInDomain
+    private val expectedResult: ImageDomainModel
 ) {
 
     companion object {
@@ -34,7 +34,7 @@ class ImageDbModelToDomainMapper(
             searchQuery = "balloon",
             createdAt = systemCurrentTimeInSeconds
         )
-        private val expectedResult1 = ImageDataModelInDomain(
+        private val expectedResult1 = ImageDomainModel(
             id = 1,
             pageURL = "https://example.com",
             type = "photo",
@@ -67,7 +67,7 @@ class ImageDbModelToDomainMapper(
             searchQuery = "Scenery",
             createdAt = systemCurrentTimeInSeconds
         )
-        private val expectedResult2 = ImageDataModelInDomain(
+        private val expectedResult2 = ImageDomainModel(
             id = 2,
             pageURL = "https://example.com",
             type = "Scenery",

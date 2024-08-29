@@ -18,7 +18,7 @@ import payback.pixabay.challenge.data.mapper.MapperInput
 import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
 import payback.pixabay.challenge.data.model.ImagesResponse
 import payback.pixabay.challenge.data.repository.ImagesDataRepository
-import payback.pixabay.challenge.domain.model.ImageDataModelInDomain
+import payback.pixabay.challenge.domain.model.ImageDomainModel
 
 @RunWith(MockitoJUnitRunner::class)
 class ImagesDataRepositoryTest {
@@ -41,7 +41,7 @@ class ImagesDataRepositoryTest {
         user = "johndoe",
         userImageURL = "https://example.com/user"
     )
-    private val sampleImageDetailInDomain = ImageDataModelInDomain(
+    private val sampleImageDetailInDomain = ImageDomainModel(
         id = 1,
         pageURL = "https://example.com",
         type = "photo",
