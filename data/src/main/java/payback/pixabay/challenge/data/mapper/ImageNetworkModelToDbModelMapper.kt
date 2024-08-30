@@ -1,14 +1,14 @@
 package payback.pixabay.challenge.data.mapper
 
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
-import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
+import payback.pixabay.challenge.data.model.ImageRemoteModel
 import payback.pixabay.challenge.common.orZero
 
 class ImageNetworkModelToDbModelMapper :
-    ApiToDbMapper<MapperInput, ImageDataModel>() {
-    override fun map(input: MapperInput): ImageDataModel {
+    ApiToDbMapper<MapperInput, ImageLocalModel>() {
+    override fun map(input: MapperInput): ImageLocalModel {
         val imageDetail = input.apiImageDetails
-        return ImageDataModel(
+        return ImageLocalModel(
             id = imageDetail.id.orZero(),
             pageURL = imageDetail.pageURL.orEmpty(),
             type = imageDetail.type.orEmpty(),
@@ -29,7 +29,7 @@ class ImageNetworkModelToDbModelMapper :
 }
 
 data class MapperInput(
-    val apiImageDetails: ImageDetailRemoteModel,
+    val apiImageDetails: ImageRemoteModel,
     val searchQuery: String,
     val createdAt: Long
 )

@@ -5,13 +5,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
-import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
+import payback.pixabay.challenge.data.model.ImageRemoteModel
 
 @RunWith(Parameterized::class)
 class ImageNetworkModelToDbModelMapperTest(
     private val input: MapperInput,
-    private val expectedResult: ImageDataModel
+    private val expectedResult: ImageLocalModel
 ) {
 
     companion object {
@@ -19,7 +19,7 @@ class ImageNetworkModelToDbModelMapperTest(
         private const val searchQuery2 = "wall"
         private val systemCurrentTimeInSeconds = System.currentTimeMillis() / 1000L
 
-        private val input1 = ImageDetailRemoteModel(
+        private val input1 = ImageRemoteModel(
             id = 1,
             pageURL = "https://example.com",
             type = "photo",
@@ -34,7 +34,7 @@ class ImageNetworkModelToDbModelMapperTest(
             user = "johndoe",
             userImageURL = "https://example.com/user"
         )
-        private val expectedResult1 = ImageDataModel(
+        private val expectedResult1 = ImageLocalModel(
             id = 1,
             pageURL = "https://example.com",
             type = "photo",
@@ -52,7 +52,7 @@ class ImageNetworkModelToDbModelMapperTest(
             createdAt = systemCurrentTimeInSeconds
         )
 
-        private val input2 = ImageDetailRemoteModel(
+        private val input2 = ImageRemoteModel(
             id = 2,
             pageURL = "https://example.com",
             type = "Scenery",
@@ -67,7 +67,7 @@ class ImageNetworkModelToDbModelMapperTest(
             user = "johndoe",
             userImageURL = "https://example.com/user"
         )
-        private val expectedResult2 = ImageDataModel(
+        private val expectedResult2 = ImageLocalModel(
             id = 2,
             pageURL = "https://example.com",
             type = "Scenery",

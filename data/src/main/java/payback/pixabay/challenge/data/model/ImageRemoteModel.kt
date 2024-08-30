@@ -2,7 +2,7 @@ package payback.pixabay.challenge.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ImageDetailRemoteModel(
+data class ImageRemoteModel(
     @SerializedName("id")
     val id: Long?,
     @SerializedName("pageURL")

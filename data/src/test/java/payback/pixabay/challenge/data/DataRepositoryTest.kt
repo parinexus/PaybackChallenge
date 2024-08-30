@@ -8,14 +8,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
 import payback.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 import payback.pixabay.challenge.data.datastore.remote.ImageApiService
 import payback.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
 import payback.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
 import payback.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMapper
 import payback.pixabay.challenge.data.mapper.MapperInput
-import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
+import payback.pixabay.challenge.data.model.ImageRemoteModel
 import payback.pixabay.challenge.data.model.ImagesResponse
 import payback.pixabay.challenge.data.repository.ImagesDataRepository
 import payback.pixabay.challenge.domain.model.ImageDomainModel
@@ -26,7 +26,7 @@ class ImagesDataRepositoryTest {
     private val searchQuery = "blue"
     private val currentTimeInSeconds = System.currentTimeMillis() / 1000L
 
-    private val sampleImageDetailFromApi = ImageDetailRemoteModel(
+    private val sampleImageDetailFromApi = ImageRemoteModel(
         id = 1,
         pageURL = "https://example.com",
         type = "photo",
@@ -57,7 +57,7 @@ class ImagesDataRepositoryTest {
         userImageURL = "https://example.com/user"
     )
 
-    private val sampleImageDetailFromDb = ImageDataModel(
+    private val sampleImageDetailFromDb = ImageLocalModel(
         id = 1,
         pageURL = "https://example.com",
         type = "photo",

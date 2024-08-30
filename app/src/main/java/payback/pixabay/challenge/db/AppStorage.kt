@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
 import payback.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 
 @Database(
-    entities = [ImageDataModel::class],
+    entities = [ImageLocalModel::class],
     version = AppStorage.VERSION,
     exportSchema = false
 )
