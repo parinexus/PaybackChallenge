@@ -15,4 +15,7 @@ interface ImageRepositoryDao {
 
     @Query("DELETE  FROM image_details WHERE searchQuery=:query")
     suspend fun removeImagesByQuery(query: String)
+
+    @Query("SELECT * FROM image_details WHERE searchQuery = :query")
+    suspend fun fetchImagesByQueryWithTimestamps(query: String): List<ImageDataModel>?
 }
