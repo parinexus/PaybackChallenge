@@ -1,12 +1,12 @@
 package payback.pixabay.challenge.data.mapper
 
-import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
+import payback.pixabay.challenge.data.model.ImageRemoteModel
 import payback.pixabay.challenge.domain.model.ImageDomainModel
 import payback.pixabay.challenge.common.orZero
 
 class ImageNetworkModelToDomainModelMapper :
-    NetworkToDomainMapper<ImageDetailRemoteModel, ImageDomainModel>() {
-    override fun map(input: ImageDetailRemoteModel) = ImageDomainModel(
+    NetworkToDomainMapper<ImageRemoteModel, ImageDomainModel>() {
+    override fun map(input: ImageRemoteModel) = ImageDomainModel(
         id = input.id.orZero(),
         pageURL = input.pageURL.orEmpty(),
         type = input.type.orEmpty(),

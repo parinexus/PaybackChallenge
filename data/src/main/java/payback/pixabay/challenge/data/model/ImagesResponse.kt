@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ImagesResponse(
     @SerializedName("hits")
-    var images: List<ImageDetailRemoteModel>?
+    var images: List<ImageRemoteModel>?
 )

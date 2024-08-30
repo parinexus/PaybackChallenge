@@ -5,17 +5,17 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import payback.pixabay.challenge.data.model.ImageDetailRemoteModel
+import payback.pixabay.challenge.data.model.ImageRemoteModel
 import payback.pixabay.challenge.domain.model.ImageDomainModel
 
 @RunWith(Parameterized::class)
 class ImageNetworkToDomainModelMapper(
-    private val input: ImageDetailRemoteModel,
+    private val input: ImageRemoteModel,
     private val expectedResult: ImageDomainModel
 ) {
 
     companion object {
-        private val input1 = ImageDetailRemoteModel(
+        private val input1 = ImageRemoteModel(
             id = 1,
             pageURL = "https://example.com",
             type = "photo",
@@ -46,7 +46,7 @@ class ImageNetworkToDomainModelMapper(
             userImageURL = "https://example.com/user"
         )
 
-        private val input2 = ImageDetailRemoteModel(
+        private val input2 = ImageRemoteModel(
             id = 2,
             pageURL = "https://example.com",
             type = "Scenery",

@@ -5,19 +5,19 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
 import payback.pixabay.challenge.domain.model.ImageDomainModel
 
 @RunWith(Parameterized::class)
 class ImageDbModelToDomainMapper(
-    private val input: ImageDataModel,
+    private val input: ImageLocalModel,
     private val expectedResult: ImageDomainModel
 ) {
 
     companion object {
         private val systemCurrentTimeInSeconds = System.currentTimeMillis() / 1000L
 
-        private val input1 = ImageDataModel(
+        private val input1 = ImageLocalModel(
             id = 1,
             pageURL = "https://example.com",
             type = "photo",
@@ -50,7 +50,7 @@ class ImageDbModelToDomainMapper(
             userImageURL = "https://example.com/user"
         )
 
-        private val input2 = ImageDataModel(
+        private val input2 = ImageLocalModel(
             id = 2,
             pageURL = "https://example.com",
             type = "Scenery",

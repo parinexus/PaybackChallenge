@@ -22,7 +22,7 @@ private const val INITIAL_SEARCH_QUERY = "fruits"
 @HiltViewModel
 class ImagesViewModel @Inject constructor(
     private val imagesUseCase: ImagesUseCase,
-    private val imageDomainModelToUiModelMapper: ImageDomainModelToUiModelMapper,
+    private val imageMapper: ImageDomainModelToUiModelMapper,
 ) : ViewModel() {
 
     private var lastQuery: String? = null
@@ -58,16 +58,26 @@ class ImagesViewModel @Inject constructor(
     }
 
     private fun handleSuccess(result: ResultModel.Success<List<ImageDomainModel>>) {
-        val images = result.data?.map { image ->
-            imageDomainModelToUiModelMapper.toUi(
-                image
-            )
-        } ?: emptyList()
+        val images = mapImages(result.data)
+        updateUiState(images = images)
+    }
 
+    private fun mapImages(data: List<ImageDomainModel>?): List<ImageUiModel> {
+        return data?.map { image ->
+            imageMapper.toUi(image)
+        } ?: emptyList()
+    }
+
+    private fun updateUiState(
+        isLoading: Boolean = false,
+        images: List<ImageUiModel> = emptyList(),
+        errorMessage: String? = null
+    ) {
         _uiState.update {
             it.copy(
-                isDataLoading = false,
-                images = images
+                isDataLoading = isLoading,
+                images = images,
+                errorMessage = errorMessage
             )
         }
     }

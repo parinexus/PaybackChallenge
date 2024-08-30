@@ -1,12 +1,12 @@
 package payback.pixabay.challenge.data.mapper
 
-import payback.pixabay.challenge.data.datastore.local.ImageDataModel
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
 import payback.pixabay.challenge.domain.model.ImageDomainModel
 
 class ImageDbModelToDomainModelMapper :
-    DbToDomainMapper<ImageDataModel, ImageDomainModel>() {
+    DbToDomainMapper<ImageLocalModel, ImageDomainModel>() {
 
-    public override fun map(input: ImageDataModel) = ImageDomainModel(
+    public override fun map(input: ImageLocalModel) = ImageDomainModel(
         id = input.id,
         pageURL = input.pageURL,
         type = input.type,
