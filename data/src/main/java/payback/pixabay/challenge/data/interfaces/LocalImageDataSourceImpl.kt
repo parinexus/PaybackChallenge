@@ -1,5 +1,6 @@
 package payback.pixabay.challenge.data.interfaces
 
+import payback.pixabay.challenge.data.datastore.local.ImageLocalModel
 import payback.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 import payback.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
 import payback.pixabay.challenge.domain.model.ImageDomainModel
@@ -25,5 +26,11 @@ class LocalImageDataSourceImpl @Inject constructor(
 
     override suspend fun removeImagesByQuery(query: String) {
         imageRepositoryDao.removeImagesByQuery(query)
+    }
+
+    override suspend fun saveImages(images: List<ImageLocalModel>?) {
+        images?.let {
+            imageRepositoryDao.saveImages(it)
+        }
     }
 }

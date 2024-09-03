@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class RemoteImageDataSourceImpl @Inject constructor(
     private val imageApiService: ImageApiService,
-    private val imageRepositoryDao: ImageRepositoryDao,
+    private val localImageDataSource: LocalImageDataSource,
     private val imageNetworkModelToDomainModelMapper: ImageNetworkModelToDomainModelMapper,
     private val imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper
 ) : RemoteImageDataSource {
@@ -37,7 +37,7 @@ class RemoteImageDataSourceImpl @Inject constructor(
         } ?: emptyList()
 
         if (dbModels.isNotEmpty()) {
-            imageRepositoryDao.saveImages(dbModels)
+            localImageDataSource.saveImages(dbModels)
         }
     }
 
