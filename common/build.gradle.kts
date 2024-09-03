@@ -5,7 +5,7 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.get().toInt()
-    namespace = "payback.pixabay.challenge.common"
+    namespace = "com.pixabay.challenge.common"
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.get().toInt()

@@ -1,12 +1,12 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    id(libs.plugins.android.library.get().toString())
+    id(libs.plugins.kotlin.android.get().toString())
+    id(libs.plugins.ksp.get().toString())
 }
 
 android {
     compileSdk = libs.versions.compile.sdk.get().toInt()
-    namespace = "payback.pixabay.challenge.data"
+    namespace = "com.pixabay.challenge.data"
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.get().toInt()
@@ -35,35 +35,35 @@ dependencies {
     implementation(project(":common"))
 
     // Storage (Room)
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.42")
-    kapt("com.google.dagger:hilt-android-compiler:2.42")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.coroutines.android)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     // OkHttp3
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
-    implementation("io.coil-kt:coil-svg:2.1.0")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 
     // Testing dependencies
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.0.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.core.testing)
 }
