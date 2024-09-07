@@ -11,8 +11,6 @@ plugins {
     id(
         libs.plugins.kotlin.android.get().toString()
     ) version libs.versions.android.kotlin.get() apply false
-
-    id(libs.plugins.ksp.get().toString()) version libs.versions.ksp.version.get() apply false
 }
 
 tasks.register<Delete>("PixabayImageSearch") {
