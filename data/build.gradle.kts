@@ -1,7 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().toString())
     id(libs.plugins.kotlin.android.get().toString())
-    id(libs.plugins.ksp.get().toString())
+    id(libs.plugins.kapt.get().toString())
 }
 
 android {
@@ -12,8 +12,8 @@ android {
         minSdk = libs.versions.min.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"${System.getenv("BASE_URL")}\"")
-        buildConfigField("String", "API_KEY", "\"${System.getenv("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "${project.properties["BASE_URL"]}")
+        buildConfigField("String", "API_KEY", "${project.properties["API_KEY"]}")
     }
 
     compileOptions {
@@ -37,12 +37,12 @@ dependencies {
     // Storage (Room)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    kapt(libs.room.compiler)
 
     // Hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    kapt(libs.google.hilt.compiler)
+    kapt(libs.android.hilt.compiler)
 
     // Coroutines
     implementation(libs.coroutines.android)
