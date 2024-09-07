@@ -2,8 +2,8 @@ plugins {
     id(libs.plugins.android.application.get().toString())
     id(libs.plugins.kotlin.android.get().toString())
     id(libs.plugins.hilt.android.plugin.get().toString())
-    id(libs.plugins.ksp.get().toString())
     id(libs.plugins.kotlin.parcelize.get().toString())
+    id(libs.plugins.kapt.get().toString())
 }
 
 android {
@@ -13,13 +13,13 @@ android {
     defaultConfig {
         applicationId = "com.pixabay.challenge"
         minSdk = libs.versions.min.sdk.get().toInt()
+        targetSdk = libs.versions.target.sdk.get().toInt()
         versionCode = libs.versions.version.code.get().toInt()
         versionName = libs.versions.version.name.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"${System.getenv("BASE_URL")}\"")
-        buildConfigField("String", "API_KEY", "\"${System.getenv("API_KEY")}\"")
-
+        buildConfigField("String", "BASE_URL", "${project.properties["BASE_URL"]}")
+        buildConfigField("String", "API_KEY", "${project.properties["API_KEY"]}")
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -76,13 +76,13 @@ dependencies {
     // Storage (Room)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    kapt(libs.room.compiler)
 
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.android.compiler)
-    ksp(libs.hilt.compiler)
+    kapt(libs.google.hilt.compiler)
+    kapt(libs.android.hilt.compiler)
 
     // Coroutines
     implementation(libs.coroutines.android)

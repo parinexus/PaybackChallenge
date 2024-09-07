@@ -1,7 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().toString())
     id(libs.plugins.kotlin.android.get().toString())
-    id(libs.plugins.ksp.get().toString())
+    id(libs.plugins.kapt.get().toString())
 }
 
 android {
@@ -27,9 +27,9 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    kapt(libs.google.hilt.compiler)
+    kapt(libs.android.hilt.compiler)
+
     implementation(libs.retrofit)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.coroutines.android)
