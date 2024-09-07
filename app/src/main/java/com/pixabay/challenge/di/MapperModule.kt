@@ -20,7 +20,7 @@ class MapperModule {
 
     @Singleton
     @Provides
-    fun provideImageDomainModelToPresentationModelMapper(): ImageDomainModelToUiModelMapper =
+    fun provideImageDomainModelToUiModelMapper(): ImageDomainModelToUiModelMapper =
         ImageDomainModelToUiModelMapper()
 
     @Singleton

@@ -13,7 +13,7 @@ import com.pixabay.challenge.common.ResultModel
 import com.pixabay.challenge.domain.model.ImageDomainModel
 import com.pixabay.challenge.domain.usecase.ImagesUseCase
 import com.pixabay.challenge.mapper.ImageDomainModelToUiModelMapper
-import com.pixabay.challenge.presentation.contract.ImageUiState
+import com.pixabay.challenge.contract.ImageUiState
 import com.pixabay.challenge.ui.model.ImageUiModel
 import javax.inject.Inject
 

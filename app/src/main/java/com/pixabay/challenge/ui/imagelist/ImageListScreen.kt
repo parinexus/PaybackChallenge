@@ -26,7 +26,7 @@ import com.pixabay.challenge.R
 import com.pixabay.challenge.navigation.AppScreens
 import com.pixabay.challenge.navigation.AppScreens.Companion.IMAGE_ID
 import com.pixabay.challenge.viewmodel.ImagesViewModel
-import com.pixabay.challenge.presentation.contract.ImageUiEvent
+import com.pixabay.challenge.contract.ImageUiEvent
 import com.pixabay.challenge.ui.components.EmptyStateView
 import com.pixabay.challenge.ui.components.QueryInputField
 import com.pixabay.challenge.ui.components.RetryAbleErrorView

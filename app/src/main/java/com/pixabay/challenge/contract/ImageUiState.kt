@@ -1,4 +1,4 @@
-package com.pixabay.challenge.presentation.contract
+package com.pixabay.challenge.contract
 
 import com.pixabay.challenge.ui.model.ImageUiModel
 
