@@ -9,18 +9,18 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import com.pixabay.challenge.data.datastore.local.ImageLocalModel
-import com.pixabay.challenge.data.datastore.local.ImageRepositoryDao
-import com.pixabay.challenge.data.datastore.remote.ImageApiService
-import com.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
+import com.pixabay.challenge.data.interfaces.LocalImageDataSource
+import com.pixabay.challenge.data.interfaces.RemoteImageDataSource
 import com.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
-import com.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMapper
 import com.pixabay.challenge.data.mapper.MapperInput
 import com.pixabay.challenge.data.model.ImageRemoteModel
-import com.pixabay.challenge.data.model.ImagesResponse
 import com.pixabay.challenge.data.repository.ImagesDataRepository
 import com.pixabay.challenge.domain.model.ImageDomainModel
+import org.mockito.Mockito.verify
 
-@RunWith(MockitoJUnitRunner::class)
+private const val FETCH_INTERVAL_IN_SECONDS: Int = 24 * 60 * 60
+
+@RunWith(MockitoJUnitRunner.Silent::class)
 class ImagesDataRepositoryTest {
 
     private val searchQuery = "blue"
@@ -76,43 +76,32 @@ class ImagesDataRepositoryTest {
     )
 
     @Mock
-    lateinit var apiService: ImageApiService
-
-    @Mock
-    lateinit var repositoryDao: ImageRepositoryDao
-
-    @Mock
-    lateinit var networkToDomainMapper: ImageNetworkModelToDomainModelMapper
-
-    @Mock
     lateinit var networkToDbMapper: ImageNetworkModelToDbModelMapper
 
     @Mock
-    lateinit var dbToDomainMapper: ImageDbModelToDomainModelMapper
+    lateinit var localImageDataSource: LocalImageDataSource
+
+    @Mock
+    lateinit var remoteImageDataSource: RemoteImageDataSource
 
     private lateinit var repository: ImagesDataRepository
 
     @Before
     fun setup() {
         repository = ImagesDataRepository(
-            imageApiService = apiService,
-            imageRepositoryDao = repositoryDao,
-            imageNetworkModelToDomainModelMapper = networkToDomainMapper,
-            imageNetworkModelToDbModelMapper = networkToDbMapper,
-            imageDbModelToDomainModelMapper = dbToDomainMapper
+            localImageDataSource = localImageDataSource,
+            remoteImageDataSource = remoteImageDataSource,
         )
     }
 
     @Test
-    fun `When fetchImages is called Then it returns list of ImageDataModelInDomain from local DB`() {
+    fun `When fetchImages is called and local data is available and valid Then it returns list of ImageDataModelInDomain from local DB`() {
         runBlocking {
             val expectedResult = listOf(sampleImageDetailInDomain)
+            val fetchTimestamp = currentTimeInSeconds - 100L // Timestamp within valid range
 
-            given(repositoryDao.fetchImagesByQuery(searchQuery))
-                .willReturn(listOf(sampleImageDetailFromDb))
-
-            given(dbToDomainMapper.toDomain(sampleImageDetailFromDb))
-                .willReturn(sampleImageDetailInDomain)
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(listOf(sampleImageDetailInDomain) to fetchTimestamp)
 
             val actualResult = repository.fetchImages(searchQuery)
 
@@ -121,18 +110,16 @@ class ImagesDataRepositoryTest {
     }
 
     @Test
-    fun `When fetchImages is called Then it returns list of ImageDataModelInDomain from remote source`() {
+    fun `When fetchImages is called and local data is stale Then it fetches from remote and updates DB`() {
         runBlocking {
+            val staleTimestamp = currentTimeInSeconds - FETCH_INTERVAL_IN_SECONDS - 100L
             val expectedResult = listOf(sampleImageDetailInDomain)
 
-            given(repositoryDao.fetchImagesByQuery(searchQuery))
-                .willReturn(emptyList())
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(listOf(sampleImageDetailInDomain) to staleTimestamp)
 
-            given(apiService.fetchImages(query = searchQuery))
-                .willReturn(ImagesResponse(images = listOf(sampleImageDetailFromApi)))
-
-            given(networkToDomainMapper.toDomain(sampleImageDetailFromApi))
-                .willReturn(sampleImageDetailInDomain)
+            given(remoteImageDataSource.fetchImages(searchQuery))
+                .willReturn(expectedResult)
 
             given(
                 networkToDbMapper.toDatabase(
@@ -143,6 +130,24 @@ class ImagesDataRepositoryTest {
                     )
                 )
             ).willReturn(sampleImageDetailFromDb)
+
+            val actualResult = repository.fetchImages(searchQuery)
+
+            assertEquals(expectedResult, actualResult)
+            verify(localImageDataSource).removeImagesByQuery(searchQuery)
+        }
+    }
+
+    @Test
+    fun `When fetchImages is called and no local data is found Then it fetches from remote`() {
+        runBlocking {
+            val expectedResult = listOf(sampleImageDetailInDomain)
+
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(emptyList<ImageDomainModel>() to 0L)
+
+            given(remoteImageDataSource.fetchImages(searchQuery))
+                .willReturn(expectedResult)
 
             val actualResult = repository.fetchImages(searchQuery)
 

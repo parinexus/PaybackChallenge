@@ -1,6 +1,5 @@
 package com.pixabay.challenge.data.interfaces
 
-import com.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 import com.pixabay.challenge.data.datastore.remote.ImageApiService
 import com.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
 import com.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMapper
@@ -26,7 +25,7 @@ class RemoteImageDataSourceImpl @Inject constructor(
         } ?: emptyList()
     }
 
-    private suspend fun saveImagesWithinDataBase(
+    suspend fun saveImagesWithinDataBase(
         imagesApiResponse: ImagesResponse,
         query: String
     ) {
@@ -41,5 +40,5 @@ class RemoteImageDataSourceImpl @Inject constructor(
         }
     }
 
-    private fun getCurrentTimeInSeconds(): Long = System.currentTimeMillis() / 1000L
+    fun getCurrentTimeInSeconds(): Long = System.currentTimeMillis() / 1000L
 }
