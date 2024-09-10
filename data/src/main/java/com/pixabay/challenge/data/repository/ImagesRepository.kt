@@ -4,6 +4,8 @@ import com.pixabay.challenge.data.interfaces.LocalImageDataSource
 import com.pixabay.challenge.data.interfaces.RemoteImageDataSource
 import com.pixabay.challenge.domain.model.ImageDomainModel
 import com.pixabay.challenge.domain.repository.ImageRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 private const val FETCH_INTERVAL_IN_SECONDS: Int = 24 * 60 * 60
@@ -18,18 +20,21 @@ class ImagesDataRepository @Inject constructor(
 
         return when {
             localData.isEmpty() -> {
-                fetchAndPersistData(query)
+                fetchAndPersistData(query).firstOrNull()?.getOrNull() ?: emptyList()
             }
 
             isRefreshNeeded(localTimestamp) -> {
                 localImageDataSource.removeImagesByQuery(query)
-                fetchAndPersistData(query)
+                fetchAndPersistData(query).firstOrNull()?.getOrNull() ?: emptyList()
             }
-            else -> localData
+
+            else -> {
+                localData
+            }
         }
     }
 
-    private suspend fun fetchAndPersistData(query: String): List<ImageDomainModel> {
+    private suspend fun fetchAndPersistData(query: String): Flow<Result<List<ImageDomainModel>>> {
         return remoteImageDataSource.fetchImages(query)
     }
 
