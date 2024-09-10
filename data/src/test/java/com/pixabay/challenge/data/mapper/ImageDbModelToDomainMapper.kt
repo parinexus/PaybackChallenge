@@ -29,7 +29,7 @@ class ImageDbModelToDomainMapper(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user",
             searchQuery = "balloon",
             createdAt = systemCurrentTimeInSeconds
@@ -46,7 +46,7 @@ class ImageDbModelToDomainMapper(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user"
         )
 
@@ -62,7 +62,7 @@ class ImageDbModelToDomainMapper(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user",
             searchQuery = "Scenery",
             createdAt = systemCurrentTimeInSeconds
@@ -79,7 +79,7 @@ class ImageDbModelToDomainMapper(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user"
         )
 
@@ -91,19 +91,17 @@ class ImageDbModelToDomainMapper(
         )
     }
 
-    private lateinit var classUnderTest: ImageDbModelToDomainModelMapper
+    private lateinit var imageDbModelToDomainModelMapper: ImageDbModelToDomainModelMapper
 
     @Before
     fun setup() {
-        classUnderTest = ImageDbModelToDomainModelMapper()
+        imageDbModelToDomainModelMapper = ImageDbModelToDomainModelMapper()
     }
 
     @Test
-    fun `Given database model When toDomain then returns expected domain model`() {
-        // When
-        val actualResult = classUnderTest.toDomain(input)
+    fun given_databaseModel_then_returns_expectedDomainModel() {
+        val actualResult = imageDbModelToDomainModelMapper.toDomain(input)
 
-        // Then
         assertEquals(expectedResult, actualResult)
     }
 }
