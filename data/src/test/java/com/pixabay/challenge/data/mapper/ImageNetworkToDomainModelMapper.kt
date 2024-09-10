@@ -27,7 +27,7 @@ class ImageNetworkToDomainModelMapper(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult1 = ImageDomainModel(
@@ -42,7 +42,7 @@ class ImageNetworkToDomainModelMapper(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user"
         )
 
@@ -58,7 +58,7 @@ class ImageNetworkToDomainModelMapper(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult2 = ImageDomainModel(
@@ -73,7 +73,7 @@ class ImageNetworkToDomainModelMapper(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user"
         )
 
@@ -85,19 +85,17 @@ class ImageNetworkToDomainModelMapper(
         )
     }
 
-    private lateinit var classUnderTest: ImageNetworkModelToDomainModelMapper
+    private lateinit var imageNetworkModelToDomainModelMapper: ImageNetworkModelToDomainModelMapper
 
     @Before
     fun setup() {
-        classUnderTest = ImageNetworkModelToDomainModelMapper()
+        imageNetworkModelToDomainModelMapper = ImageNetworkModelToDomainModelMapper()
     }
 
     @Test
-    fun `Given database model When toDomain then returns expected domain model`() {
-        // When
-        val actualResult = classUnderTest.toDomain(input)
+    fun given_networkModel_then_returns_expectedDomainModel() {
+        val actualResult = imageNetworkModelToDomainModelMapper.toDomain(input)
 
-        // Then
         assertEquals(expectedResult, actualResult)
     }
 }

@@ -32,67 +32,43 @@ import com.pixabay.challenge.utils.TestTag
 class ImageListScreenTest {
 
     private val sampleImage1 = ImageUiModel(
-        id = 1,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "parisa",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage2 = ImageUiModel(
-        id = 2,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 12322,
         user = "mohammad",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage3 = ImageUiModel(
-        id = 3,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "reza",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage4 = ImageUiModel(
-        id = 4,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "ali",
-        userImageURL = "https://example.com/user"
     )
 
     private val imageList = listOf(sampleImage1, sampleImage2, sampleImage3, sampleImage4)

@@ -1,5 +1,6 @@
 package com.pixabay.challenge.data
 
+import com.nhaarman.mockitokotlin2.whenever
 import com.pixabay.challenge.data.datastore.local.ImageLocalModel
 import com.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 import com.pixabay.challenge.data.interfaces.LocalImageDataSourceImpl
@@ -68,11 +69,11 @@ class LocalImageDataSourceImplTest {
     }
 
     @Test
-    fun `fetchImagesWithTimestamp returns domain models and correct timestamp`(): Unit = runBlocking {
+    fun fetchImagesWithTimestamp_returnsDomainModelsAndTimestamp_whenImagesArePresent() = runBlocking {
         val imagesWithTimestamp = listOf(sampleImageDbModel)
-        `when`(imageRepositoryDao.fetchImagesByQueryWithTimestamps(searchQuery))
+        whenever(imageRepositoryDao.fetchImagesByQueryWithTimestamps(searchQuery))
             .thenReturn(imagesWithTimestamp)
-        `when`(imageDbModelToDomainModelMapper.toDomain(sampleImageDbModel))
+        whenever(imageDbModelToDomainModelMapper.toDomain(sampleImageDbModel))
             .thenReturn(sampleImageDomainModel)
 
         val (domainModels, timestamp) = localImageDataSourceImpl.fetchImagesWithTimestamp(searchQuery)
@@ -82,11 +83,12 @@ class LocalImageDataSourceImplTest {
 
         verify(imageRepositoryDao).fetchImagesByQueryWithTimestamps(searchQuery)
         verify(imageDbModelToDomainModelMapper).toDomain(sampleImageDbModel)
+        verifyNoMoreInteractions(imageRepositoryDao, imageDbModelToDomainModelMapper)
     }
 
     @Test
-    fun `fetchImagesWithTimestamp returns empty list and timestamp zero if no images are found`() = runBlocking {
-        `when`(imageRepositoryDao.fetchImagesByQueryWithTimestamps(searchQuery))
+    fun fetchImagesWithTimestamp_returnsEmptyListAndZeroTimestamp_whenNoImagesAreFound() = runBlocking {
+        whenever(imageRepositoryDao.fetchImagesByQueryWithTimestamps(searchQuery))
             .thenReturn(emptyList())
 
         val (domainModels, timestamp) = localImageDataSourceImpl.fetchImagesWithTimestamp(searchQuery)
@@ -99,10 +101,10 @@ class LocalImageDataSourceImplTest {
     }
 
     @Test
-    fun `fetchImages returns mapped domain models from local DB`(): Unit = runBlocking {
-        `when`(imageRepositoryDao.fetchImagesByQuery(searchQuery))
+    fun fetchImages_returnsMappedDomainModels_whenImagesArePresent() = runBlocking {
+        whenever(imageRepositoryDao.fetchImagesByQuery(searchQuery))
             .thenReturn(listOf(sampleImageDbModel))
-        `when`(imageDbModelToDomainModelMapper.toDomain(sampleImageDbModel))
+        whenever(imageDbModelToDomainModelMapper.toDomain(sampleImageDbModel))
             .thenReturn(sampleImageDomainModel)
 
         val actualResult = localImageDataSourceImpl.fetchImages(searchQuery)
@@ -111,11 +113,12 @@ class LocalImageDataSourceImplTest {
 
         verify(imageRepositoryDao).fetchImagesByQuery(searchQuery)
         verify(imageDbModelToDomainModelMapper).toDomain(sampleImageDbModel)
+        verifyNoMoreInteractions(imageRepositoryDao, imageDbModelToDomainModelMapper)
     }
 
     @Test
-    fun `fetchImages returns empty list if no images are found`() = runBlocking {
-        `when`(imageRepositoryDao.fetchImagesByQuery(searchQuery)).thenReturn(emptyList())
+    fun fetchImages_returnsEmptyList_whenNoImagesAreFound() = runBlocking {
+        whenever(imageRepositoryDao.fetchImagesByQuery(searchQuery)).thenReturn(emptyList())
 
         val actualResult = localImageDataSourceImpl.fetchImages(searchQuery)
 
@@ -126,23 +129,25 @@ class LocalImageDataSourceImplTest {
     }
 
     @Test
-    fun `removeImagesByQuery calls repository to remove images`() = runBlocking {
+    fun removeImagesByQuery_callsRepository_toRemoveImages() = runBlocking {
         localImageDataSourceImpl.removeImagesByQuery(searchQuery)
 
         verify(imageRepositoryDao).removeImagesByQuery(searchQuery)
+        verifyNoMoreInteractions(imageRepositoryDao)
     }
 
     @Test
-    fun `saveImages saves images to the database`() = runBlocking {
+    fun saveImages_savesImages_toTheDatabase() = runBlocking {
         val images = listOf(sampleImageDbModel)
 
         localImageDataSourceImpl.saveImages(images)
 
         verify(imageRepositoryDao).saveImages(images)
+        verifyNoMoreInteractions(imageRepositoryDao)
     }
 
     @Test
-    fun `saveImages does nothing if images list is null`() = runBlocking {
+    fun saveImages_doesNothing_ifImagesListIsNull() = runBlocking {
         localImageDataSourceImpl.saveImages(null)
 
         verifyNoInteractions(imageRepositoryDao)

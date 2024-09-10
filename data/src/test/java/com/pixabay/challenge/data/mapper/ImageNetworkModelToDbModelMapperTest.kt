@@ -31,7 +31,7 @@ class ImageNetworkModelToDbModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult1 = ImageLocalModel(
@@ -46,7 +46,7 @@ class ImageNetworkModelToDbModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user",
             searchQuery = searchQuery1,
             createdAt = systemCurrentTimeInSeconds
@@ -64,7 +64,7 @@ class ImageNetworkModelToDbModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult2 = ImageLocalModel(
@@ -79,7 +79,7 @@ class ImageNetworkModelToDbModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test2",
             userImageURL = "https://example.com/user",
             searchQuery = searchQuery2,
             createdAt = systemCurrentTimeInSeconds
@@ -93,19 +93,17 @@ class ImageNetworkModelToDbModelMapperTest(
         )
     }
 
-    private lateinit var classUnderTest: ImageNetworkModelToDbModelMapper
+    private lateinit var imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper
 
     @Before
     fun setup() {
-        classUnderTest = ImageNetworkModelToDbModelMapper()
+        imageNetworkModelToDbModelMapper = ImageNetworkModelToDbModelMapper()
     }
 
     @Test
-    fun `Given database model When toDatabase then returns expected domain model`() {
-        // When
-        val actualResult = classUnderTest.toDatabase(input)
+    fun given_networkModel_then_returns_expectedDatabaseModel() {
+        val actualResult = imageNetworkModelToDbModelMapper.toDatabase(input)
 
-        // Then
         assertEquals(expectedResult, actualResult)
     }
 }

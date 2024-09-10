@@ -1,9 +1,7 @@
 package com.pixabay.challenge.domain
 
-import android.content.res.Resources
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -19,7 +17,6 @@ import com.pixabay.challenge.domain.usecase.ImagesUseCase
 import retrofit2.HttpException
 import retrofit2.Response
 
-@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class FetchImagesUseCaseTest {
     private val searchQuery = "yellow"
@@ -59,9 +56,6 @@ class FetchImagesUseCaseTest {
     @Mock
     lateinit var imagesRepository: ImageRepository
 
-    @Mock
-    lateinit var resources: Resources
-
     private lateinit var fetchImagesUseCase: ImagesUseCase
 
     @Before
@@ -70,8 +64,7 @@ class FetchImagesUseCaseTest {
     }
 
     @Test
-    fun `fetchImages_WithValidSearchQuery_ReturnsListOfImages`() = runBlocking {
-        // Given
+    fun fetchImages_givenValidSearchQuery_returnsListOfImages() = runBlocking {
         val expectedImages = listOf(image1, image2)
         given(imagesRepository.fetchImages(searchQuery)).willReturn(expectedImages)
 
@@ -80,13 +73,11 @@ class FetchImagesUseCaseTest {
             resultImages = it.data
         }
 
-        // Then
         Assert.assertEquals(expectedImages, resultImages)
     }
 
     @Test
-    fun `fetchImages_WithInvalidResponse_ThrowsHttpException`() = runBlocking {
-        // Given
+    fun fetchImages_givenInvalidResponse_throwsHttpException() = runBlocking {
         val message = "An unexpected error occurred"
         val response = Response.error<String>(
             404,
@@ -96,13 +87,11 @@ class FetchImagesUseCaseTest {
         whenever(imagesRepository.fetchImages(searchQuery)).thenThrow(HttpException(response))
         val expectedResult = "HTTP 404 " + response.message()
 
-        // When
         var actualMessage: String? = null
         fetchImagesUseCase(searchQuery).collect {
             actualMessage = it.message
         }
 
-        // Then
         Assert.assertEquals(expectedResult, actualMessage)
     }
 }
