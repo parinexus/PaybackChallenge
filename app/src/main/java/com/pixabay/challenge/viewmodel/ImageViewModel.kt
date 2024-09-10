@@ -15,9 +15,11 @@ import com.pixabay.challenge.domain.usecase.ImagesUseCase
 import com.pixabay.challenge.mapper.ImageDomainModelToUiModelMapper
 import com.pixabay.challenge.contract.ImageUiState
 import com.pixabay.challenge.ui.model.ImageUiModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private const val INITIAL_SEARCH_QUERY = "fruits"
+const val INITIAL_SEARCH_QUERY = "fruits"
 
 @HiltViewModel
 class ImagesViewModel @Inject constructor(
@@ -25,7 +27,7 @@ class ImagesViewModel @Inject constructor(
     private val imageMapper: ImageDomainModelToUiModelMapper,
 ) : ViewModel() {
 
-    private var lastQuery: String? = null
+    private var lastQuery: String = INITIAL_SEARCH_QUERY
     private val _uiState = MutableStateFlow(ImageUiState())
     val uiState = _uiState.stateIn(
         viewModelScope,
@@ -34,23 +36,25 @@ class ImagesViewModel @Inject constructor(
     )
 
     init {
-        fetchImages(INITIAL_SEARCH_QUERY)
+        fetchImages(lastQuery)
     }
 
     fun fetchImages(query: String) {
-        lastQuery = query
-        updateLoadingState(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            imagesUseCase(query).collect { result ->
-                when (result) {
-                    is ResultModel.Success -> handleSuccess(result)
-                    is ResultModel.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                isDataLoading = false,
-                                errorMessage = result.message.orEmpty()
-                            )
-                        }
+        updateLoadingState(isLoading = true)
+
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                imagesUseCase(query).first()
+            }
+
+            when (result) {
+                is ResultModel.Success -> handleSuccess(result)
+                is ResultModel.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            errorMessage = result.message.orEmpty()
+                        )
                     }
                 }
             }
@@ -83,7 +87,7 @@ class ImagesViewModel @Inject constructor(
     }
 
     fun retry() {
-        lastQuery?.let { fetchImages(it) }
+        fetchImages(lastQuery)
     }
 
     fun showDialog(isVisible: Boolean, image: ImageUiModel?) {
