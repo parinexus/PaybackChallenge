@@ -39,11 +39,11 @@ fun ImageThumbnailEntry(imageDetailUi: ImageUiModel, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(dimensionResource(id = R.dimen.lazy_item_height))
-            .padding(vertical = dimensionResource(id = R.dimen.padding_small))
+            .padding(vertical = dimensionResource(id = R.dimen.padding_standard))
             .testTag(IMAGE_ITEM_TAG)
             .background(color = colorResource(id = R.color.accent_dark))
             .clickable { onClick.invoke() }
-            .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+            .padding(horizontal = dimensionResource(id = R.dimen.padding_large))
             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_medium)))
     ) {
 

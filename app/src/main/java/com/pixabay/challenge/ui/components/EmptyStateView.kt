@@ -22,7 +22,7 @@ fun EmptyStateView() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(dimensionResource(id = R.dimen.padding_large))
+            .padding(dimensionResource(id = R.dimen.padding_xlarge))
             .fillMaxSize()
             .testTag(
                 TestTag.EMPTY_IMAGE_LIST_TAG
