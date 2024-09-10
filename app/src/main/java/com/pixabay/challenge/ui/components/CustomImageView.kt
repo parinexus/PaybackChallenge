@@ -5,20 +5,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.pixabay.challenge.R
 
 @Composable
 fun CustomImageView(
@@ -46,11 +46,10 @@ fun CustomImageView(
             modifier = Modifier.fillMaxSize()
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.size(70.dp),
+                modifier = Modifier.size(dimensionResource(id = R.dimen.progress_indicator_size)),
                 color = MaterialTheme.colors.onBackground
             )
         }
-
     } else {
         Image(
             painter = painter,

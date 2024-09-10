@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsPropertyKey
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -91,48 +91,47 @@ fun ImageInfoScreen(
                 .padding(paddingValues)
                 .testTag(IMAGE_DETAIL_TAG)
         ) {
-                FullImageCard(imageDetail.largeImageURL)
+            FullImageCard(imageDetail.largeImageURL)
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_standard)))
 
-                TagChipView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    tags = imageDetail.tags
+            TagChipView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(id = R.dimen.spacing_standard)),
+                tags = imageDetail.tags
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_standard)))
+
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues),
+                mainAxisAlignment = FlowMainAxisAlignment.Center,
+                mainAxisSpacing = dimensionResource(id = R.dimen.spacing_standard),
+                crossAxisSpacing = dimensionResource(id = R.dimen.spacing_standard)
+            ) {
+                IconLabelStack(
+                    modifier = Modifier.testTag(DOWNLOAD_TAG),
+                    icon = R.drawable.ic_download,
+                    text = imageDetail.downloads
                 )
+                IconLabelStack(
+                    modifier = Modifier.testTag(COMMENT_TAG),
+                    icon = R.drawable.ic_comment,
+                    text = imageDetail.comments
+                )
+                IconLabelStack(
+                    modifier = Modifier.testTag(LIKE_TAG),
+                    icon = R.drawable.ic_like,
+                    text = imageDetail.likes
+                )
+            }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_medium)))
 
-                FlowRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(paddingValues),
-                    mainAxisAlignment = FlowMainAxisAlignment.Center,
-                    mainAxisSpacing = 12.dp,
-                    crossAxisSpacing = 12.dp
-                ) {
-                    IconLabelStack(
-                        modifier = Modifier.testTag(DOWNLOAD_TAG),
-                        icon = R.drawable.ic_download,
-                        text = imageDetail.downloads
-                    )
-                    IconLabelStack(
-                        modifier = Modifier.testTag(COMMENT_TAG),
-                        icon = R.drawable.ic_comment,
-                        text = imageDetail.comments
-                    )
-                    IconLabelStack(
-                        modifier = Modifier.testTag(LIKE_TAG),
-                        icon = R.drawable.ic_like,
-                        text = imageDetail.likes
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                ImageSourceCredit(modifier = Modifier.padding(horizontal = 16.dp))
-
+            ImageSourceCredit(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.spacing_standard)))
         }
     }
 }
@@ -152,14 +151,14 @@ fun IconLabelStack(
             painterResource(id = icon),
             contentDescription = text,
             modifier = Modifier
-                .size(54.dp)
-                .padding(12.dp)
+                .size(dimensionResource(id = R.dimen.icon_size))
+                .padding(dimensionResource(id = R.dimen.spacing_standard))
                 .semantics { drawableId = icon },
             tint = MaterialTheme.colors.onBackground
         )
         Text(
             text = text,
-            fontSize = 18.sp,
+            fontSize = dimensionResource(id = R.dimen.font_size_medium).value.sp,
             style = MaterialTheme.typography.overline,
             color = MaterialTheme.colors.onBackground
         )
@@ -173,15 +172,14 @@ private fun FullImageCard(imagePath: String) {
     Box(
         modifier = Modifier
             .wrapContentWidth()
-            .height(300.dp)
-            .padding(4.dp)
+            .height(dimensionResource(id = R.dimen.image_height))
+            .padding(dimensionResource(id = R.dimen.padding_small))
             .background(MaterialTheme.colors.onPrimary, shape = MaterialTheme.shapes.medium)
             .testTag(LARGE_IMAGE_TAG)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_standard)))
         CustomImageView(context, imagePath, false, Modifier.fillMaxSize())
-        Spacer(modifier = Modifier.height(16.dp))
-
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_standard)))
     }
 }
 
@@ -201,7 +199,7 @@ private fun ImageSourceCredit(modifier: Modifier) {
     ClickableText(
         modifier = modifier
             .background(color = MaterialTheme.colors.secondary)
-            .padding(4.dp)
+            .padding(dimensionResource(id = R.dimen.padding_2xSmall))
             .testTag(SOURCE_CREDIT_TAG),
         text = annotatedString,
         style = TextStyle(

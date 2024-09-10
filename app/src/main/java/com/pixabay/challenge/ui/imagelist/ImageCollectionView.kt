@@ -8,7 +8,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.pixabay.challenge.R
 import com.pixabay.challenge.ui.model.ImageUiModel
 import com.pixabay.challenge.utils.TestTag.IMAGE_COLLECTION_TAG
 
@@ -21,8 +22,8 @@ fun ImageCollectionView(
     onCountryClick: (ImageUiModel) -> Unit
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_small)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small)),
         modifier = modifier.testTag(IMAGE_COLLECTION_TAG)
     ) {
         items(list.size, { itemKey ->
