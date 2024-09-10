@@ -1,5 +1,7 @@
 package com.pixabay.challenge.ui.components
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,15 +15,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import com.pixabay.challenge.R
+import com.pixabay.challenge.viewmodel.INITIAL_SEARCH_QUERY
 
 @Composable
 fun QueryInputField(
     onSearch: (searchQuery: String) -> Unit
 ) {
-    val searchText = remember { mutableStateOf("fruits") }
+    val searchText = remember { mutableStateOf(INITIAL_SEARCH_QUERY) }
+    val context = LocalContext.current
 
     TextField(
         modifier = Modifier.fillMaxWidth(),
@@ -33,9 +38,9 @@ fun QueryInputField(
             Image(
                 painter = painterResource(R.drawable.ic_search),
                 contentScale = ContentScale.FillBounds,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = Modifier.clickable {
-                    onSearch(searchText.value)
+                    handleSearch(searchText.value, context, onSearch)
                 },
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
             )
@@ -43,9 +48,18 @@ fun QueryInputField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = {
-                onSearch(searchText.value)
+                handleSearch(searchText.value, context, onSearch)
             }
-        )
-
+        ),
+        singleLine = true,
+        maxLines = 1,
     )
+}
+
+private fun handleSearch(query: String, context: Context, onSearch: (searchQuery: String) -> Unit) {
+    if (query.isNotBlank()) {
+        onSearch(query)
+    } else {
+        Toast.makeText(context, context.getString(R.string.empty_query), Toast.LENGTH_SHORT).show()
+    }
 }
