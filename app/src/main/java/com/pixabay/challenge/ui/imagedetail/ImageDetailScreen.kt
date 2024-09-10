@@ -44,13 +44,6 @@ import com.pixabay.challenge.common.openBrowser
 import com.pixabay.challenge.ui.components.CustomImageView
 import com.pixabay.challenge.ui.imagelist.TagChipView
 import com.pixabay.challenge.ui.model.ImageUiModel
-import com.pixabay.challenge.utils.TestTag.COMMENT_TAG
-import com.pixabay.challenge.utils.TestTag.DOWNLOAD_TAG
-import com.pixabay.challenge.utils.TestTag.LARGE_IMAGE_TAG
-import com.pixabay.challenge.utils.TestTag.LIKE_TAG
-import com.pixabay.challenge.utils.TestTag.SOURCE_CREDIT_TAG
-import com.pixabay.challenge.utils.TestTag.IMAGE_DETAIL_TAG
-import com.pixabay.challenge.utils.TestTag.USERNAME_TAG
 
 val DrawableId = SemanticsPropertyKey<Int>("DrawableResId")
 var SemanticsPropertyReceiver.drawableId by DrawableId
@@ -66,7 +59,7 @@ fun ImageInfoScreen(
             TopAppBar(
                 title = {
                     Text(
-                        modifier = Modifier.testTag(USERNAME_TAG),
+                        modifier = Modifier,
                         text = imageDetail.user,
                         style = MaterialTheme.typography.h6.copy(
                             color = MaterialTheme.colors.onPrimary
@@ -89,7 +82,6 @@ fun ImageInfoScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .testTag(IMAGE_DETAIL_TAG)
         ) {
             FullImageCard(imageDetail.largeImageURL)
 
@@ -113,17 +105,17 @@ fun ImageInfoScreen(
                 crossAxisSpacing = dimensionResource(id = R.dimen.spacing_standard)
             ) {
                 IconLabelStack(
-                    modifier = Modifier.testTag(DOWNLOAD_TAG),
+                    modifier = Modifier,
                     icon = R.drawable.ic_download,
                     text = imageDetail.downloads
                 )
                 IconLabelStack(
-                    modifier = Modifier.testTag(COMMENT_TAG),
+                    modifier = Modifier,
                     icon = R.drawable.ic_comment,
                     text = imageDetail.comments
                 )
                 IconLabelStack(
-                    modifier = Modifier.testTag(LIKE_TAG),
+                    modifier = Modifier,
                     icon = R.drawable.ic_like,
                     text = imageDetail.likes
                 )
@@ -175,7 +167,6 @@ private fun FullImageCard(imagePath: String) {
             .height(dimensionResource(id = R.dimen.image_height))
             .padding(dimensionResource(id = R.dimen.padding_standard))
             .background(MaterialTheme.colors.onPrimary, shape = MaterialTheme.shapes.medium)
-            .testTag(LARGE_IMAGE_TAG)
     ) {
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_standard)))
         CustomImageView(context, imagePath, false, Modifier.fillMaxSize())
@@ -199,8 +190,7 @@ private fun ImageSourceCredit(modifier: Modifier) {
     ClickableText(
         modifier = modifier
             .background(color = MaterialTheme.colors.secondary)
-            .padding(dimensionResource(id = R.dimen.padding_2xSmall))
-            .testTag(SOURCE_CREDIT_TAG),
+            .padding(dimensionResource(id = R.dimen.padding_2xSmall)),
         text = annotatedString,
         style = TextStyle(
             color = MaterialTheme.colors.onBackground
