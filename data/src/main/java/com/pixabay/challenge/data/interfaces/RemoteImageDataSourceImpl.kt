@@ -6,6 +6,9 @@ import com.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMapper
 import com.pixabay.challenge.data.mapper.MapperInput
 import com.pixabay.challenge.data.model.ImagesResponse
 import com.pixabay.challenge.domain.model.ImageDomainModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoteImageDataSourceImpl @Inject constructor(
@@ -15,14 +18,18 @@ class RemoteImageDataSourceImpl @Inject constructor(
     private val imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper
 ) : RemoteImageDataSource {
 
-    override suspend fun fetchImages(query: String): List<ImageDomainModel> {
+    override suspend fun fetchImages(query: String): Flow<Result<List<ImageDomainModel>>> = flow {
         val imagesApiResponse = imageApiService.fetchImages(query = query)
 
         saveImagesWithinDataBase(imagesApiResponse, query)
 
-        return imagesApiResponse.images?.map { imageDetail ->
+        val domainModels = imagesApiResponse.images?.map { imageDetail ->
             imageNetworkModelToDomainModelMapper.toDomain(imageDetail)
         } ?: emptyList()
+
+        emit(Result.success(domainModels))
+    }.catch { exception ->
+        emit(Result.failure(exception))
     }
 
     suspend fun saveImagesWithinDataBase(

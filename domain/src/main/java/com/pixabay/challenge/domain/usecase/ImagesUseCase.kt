@@ -14,7 +14,11 @@ class ImagesUseCase @Inject constructor(
         flow {
             runCatching { imagesRepository.fetchImages(query) }
                 .onSuccess { images ->
-                    emit(ResultModel.Success(images))
+                    if (images.isEmpty()) {
+                        emit(ResultModel.Error("No images found for the query: $query"))
+                    } else {
+                        emit(ResultModel.Success(images))
+                    }
                 }.onFailure { e ->
                     emit(ResultModel.Error(e.localizedMessage))
                 }
