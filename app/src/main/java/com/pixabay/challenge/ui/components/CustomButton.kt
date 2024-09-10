@@ -7,7 +7,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.pixabay.challenge.R
 
 @Composable
 fun CustomButton(
@@ -19,13 +20,11 @@ fun CustomButton(
 ) {
     Button(
         modifier = modifier,
-        onClick = {
-            onClick()
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor
         ),
-        elevation = ButtonDefaults.elevation(defaultElevation = 0.dp)
+        elevation = ButtonDefaults.elevation(defaultElevation = dimensionResource(id = R.dimen.zero_dp))
     ) {
         Text(text = text, color = textColor)
     }

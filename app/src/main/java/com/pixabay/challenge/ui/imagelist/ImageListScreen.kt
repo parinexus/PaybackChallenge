@@ -15,71 +15,56 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pixabay.challenge.R
 import com.pixabay.challenge.navigation.AppScreens
 import com.pixabay.challenge.navigation.AppScreens.Companion.IMAGE_ID
 import com.pixabay.challenge.viewmodel.ImagesViewModel
-import com.pixabay.challenge.contract.ImageUiEvent
 import com.pixabay.challenge.ui.components.EmptyStateView
 import com.pixabay.challenge.ui.components.QueryInputField
 import com.pixabay.challenge.ui.components.RetryAbleErrorView
 
-@ExperimentalComposeUiApi
-@ExperimentalLayoutApi
-@ExperimentalMaterialApi
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ImageListScreen(
     navController: NavController,
     viewModel: ImagesViewModel = hiltViewModel()
 ) {
-    val imageEvents = ImageUiEvent(
-        getImages = { viewModel.fetchImages(it) },
-        retry = {
-            viewModel.retry()
-        },
-        showDialog = { isShowAble, imageUiModel -> viewModel.showDialog(isShowAble, imageUiModel) },
-    )
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.app_name))
-                },
+                title = { Text(text = stringResource(id = R.string.app_name)) },
                 backgroundColor = MaterialTheme.colors.primary
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            val softKeyboardController = LocalSoftwareKeyboardController.current
+        Column(modifier = Modifier.padding(paddingValues)) {
 
             QueryInputField(
                 onSearch = { searchQuery ->
-                    imageEvents.getImages(searchQuery)
-                    softKeyboardController?.hide()
-                }
+                    viewModel.fetchImages(searchQuery)
+                },
             )
 
             when {
                 state.isDataLoading -> {
-                    Box(modifier = Modifier.size(70.dp), contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.progress_bar_size)),
+                        contentAlignment = Alignment.Center
+                    ) {
                         CircularProgressIndicator(color = MaterialTheme.colors.onBackground)
                     }
                 }
 
-                state.errorMessage?.isNotBlank() == true -> {
+                state.errorMessage?.isNotEmpty() == true -> {
                     RetryAbleErrorView(state.errorMessage) {
-                        imageEvents.retry()
+                        viewModel.retry()
                     }
                 }
 
@@ -92,11 +77,10 @@ fun ImageListScreen(
                         modifier = Modifier,
                         list = state.images
                     ) { imageData ->
-                        imageEvents.showDialog(true, imageData)
+                        viewModel.showDialog(true, imageData)
                     }
                 }
             }
-
 
             state.imageModel?.let {
                 if (state.showDialog) {
@@ -104,14 +88,13 @@ fun ImageListScreen(
                         imageDetail = it,
                         onPositive = {
                             navController.currentBackStackEntry?.savedStateHandle?.set(
-                                IMAGE_ID,
-                                it
+                                IMAGE_ID, it
                             )
                             navController.navigate(AppScreens.ImageDetailScreen.route)
-                            imageEvents.showDialog(false, null)
+                            viewModel.showDialog(false, null)
                         },
                         dismissDialog = {
-                            imageEvents.showDialog(false, null)
+                            viewModel.showDialog(false, null)
                         }
                     )
                 }
