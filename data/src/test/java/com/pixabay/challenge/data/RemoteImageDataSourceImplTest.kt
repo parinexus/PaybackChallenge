@@ -1,5 +1,6 @@
 package com.pixabay.challenge.data
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import com.pixabay.challenge.data.datastore.local.ImageLocalModel
 import com.pixabay.challenge.data.datastore.remote.ImageApiService
@@ -11,6 +12,7 @@ import com.pixabay.challenge.data.mapper.MapperInput
 import com.pixabay.challenge.data.model.ImageRemoteModel
 import com.pixabay.challenge.data.model.ImagesResponse
 import com.pixabay.challenge.domain.model.ImageDomainModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -19,7 +21,6 @@ import kotlin.math.abs
 import org.junit.Before
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
-import org.mockito.Mockito.`when`
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -86,70 +87,59 @@ class RemoteImageDataSourceImplTest {
     }
 
     @Test
-    fun `fetchImages returns empty list when API response is null`() = runBlocking {
-        `when`(imageApiService.fetchImages(query = searchQuery)).thenReturn(ImagesResponse(images = null))
+    fun fetchImages_givenNullApiResponse_returnsEmptyList() = runBlocking {
+        whenever(imageApiService.fetchImages(query = searchQuery)).thenReturn(ImagesResponse(images = null))
 
-        val actualResult = remoteImageDataSourceImpl.fetchImages(searchQuery)
+        val actualResult = remoteImageDataSourceImpl.fetchImages(searchQuery).first()
 
-        assertEquals(emptyList<ImageDomainModel>(), actualResult)
+        assertEquals(Result.success(emptyList<ImageDomainModel>()), actualResult)
         verify(imageApiService).fetchImages(query = searchQuery)
-        verify(localImageDataSource, Mockito.never()).saveImages(emptyList())
-
-        verifyNoMoreInteractions(imageNetworkModelToDomainModelMapper)
+        verify(localImageDataSource, Mockito.never()).saveImages(any())
+        verifyNoMoreInteractions(imageNetworkModelToDomainModelMapper, localImageDataSource)
     }
 
     @Test
-    fun `fetchImages maps API response to domain models`() = runBlocking {
-        val searchQuery = "test"
-
-        val apiResponse = ImagesResponse(
-            images = listOf(sampleApiImageDetail)
-        )
+    fun fetchImages_givenValidApiResponse_mapsApiResponseToDomainModels() = runBlocking {
+        val apiResponse = ImagesResponse(images = listOf(sampleApiImageDetail))
 
         whenever(imageApiService.fetchImages(query = searchQuery)).thenReturn(apiResponse)
         whenever(imageNetworkModelToDomainModelMapper.toDomain(sampleApiImageDetail)).thenReturn(sampleImageDomainModel)
 
-        val actualResult = remoteImageDataSourceImpl.fetchImages(searchQuery)
+        val actualResult = remoteImageDataSourceImpl.fetchImages(searchQuery).first()
 
-        assertEquals(listOf(sampleImageDomainModel), actualResult)
-
+        assertEquals(Result.success(listOf(sampleImageDomainModel)), actualResult)
         verify(imageApiService).fetchImages(query = searchQuery)
         verify(imageNetworkModelToDomainModelMapper).toDomain(sampleApiImageDetail)
-        verifyNoMoreInteractions(imageNetworkModelToDomainModelMapper)
+        verifyNoMoreInteractions(imageApiService, imageNetworkModelToDomainModelMapper)
     }
+
     @Test
-    fun `fetchImages maps API response to domain models and saves images to the local database`() = runBlocking {
-        val searchQuery = "test"
-
-        val apiResponse = ImagesResponse(
-            images = listOf(sampleApiImageDetail)
-        )
-
+    fun fetchImages_givenValidApiResponse_mapsAndSavesImagesToLocalDatabase() = runBlocking {
+        val apiResponse = ImagesResponse(images = listOf(sampleApiImageDetail))
         val dbModel = ImageLocalModel(
             id = 1,
             searchQuery = searchQuery,
-            pageURL = "http://example.com",
+            pageURL = "https://example.com",
             type = "photo",
-            tags = "tag1,tag2",
-            previewURL = "http://example.com/preview",
-            webFormatURL = "http://example.com/web",
-            largeImageURL = "http://example.com/large",
-            downloads = 100,
+            tags = "nature, landscape",
+            previewURL = "https://example.com/preview",
+            webFormatURL = "https://example.com/webformat",
+            largeImageURL = "https://example.com/large",
+            downloads = 50,
             likes = 10,
             comments = 5,
-            userId = 1,
-            user = "user",
-            userImageURL = "http://example.com/userimage",
+            userId = 123,
+            user = "test1",
+            userImageURL = "https://example.com/user",
             createdAt = System.currentTimeMillis() / 1000L
         )
-
         val mapperInput = MapperInput(sampleApiImageDetail, searchQuery, dbModel.createdAt)
 
         whenever(imageApiService.fetchImages(query = searchQuery)).thenReturn(apiResponse)
         whenever(imageNetworkModelToDomainModelMapper.toDomain(sampleApiImageDetail)).thenReturn(sampleImageDomainModel)
         whenever(imageNetworkModelToDbModelMapper.toDatabase(mapperInput)).thenReturn(dbModel)
 
-        remoteImageDataSourceImpl.fetchImages(searchQuery)
+        remoteImageDataSourceImpl.fetchImages(searchQuery).first()
 
         verify(imageApiService).fetchImages(query = searchQuery)
         verify(imageNetworkModelToDomainModelMapper).toDomain(sampleApiImageDetail)
@@ -159,18 +149,18 @@ class RemoteImageDataSourceImplTest {
     }
 
     @Test
-    fun `saveImagesWithinDataBase does not save anything when API response is empty`() = runBlocking {
+    fun saveImagesWithinDataBase_givenEmptyApiResponse_doesNotSaveToLocalDatabase() = runBlocking {
         val emptyImagesResponse = ImagesResponse(images = emptyList())
         val query = "test"
 
         remoteImageDataSourceImpl.saveImagesWithinDataBase(emptyImagesResponse, query)
 
-        verify(localImageDataSource, Mockito.never()).saveImages(emptyList())
+        verify(localImageDataSource, Mockito.never()).saveImages(any())
         verifyNoMoreInteractions(imageNetworkModelToDbModelMapper)
     }
 
     @Test
-    fun `getCurrentTimeInSeconds returns current time in seconds`() {
+    fun getCurrentTimeInSeconds_returnsCurrentTimeInSeconds() {
         val currentTimeInSeconds = remoteImageDataSourceImpl.getCurrentTimeInSeconds()
 
         val expectedTimeInSeconds = System.currentTimeMillis() / 1000L

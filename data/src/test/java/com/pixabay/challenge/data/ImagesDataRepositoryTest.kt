@@ -16,6 +16,8 @@ import com.pixabay.challenge.data.mapper.MapperInput
 import com.pixabay.challenge.data.model.ImageRemoteModel
 import com.pixabay.challenge.data.repository.ImagesDataRepository
 import com.pixabay.challenge.domain.model.ImageDomainModel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
 import org.mockito.Mockito.verify
 
 private const val FETCH_INTERVAL_IN_SECONDS: Int = 24 * 60 * 60
@@ -38,10 +40,11 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test1",
         userImageURL = "https://example.com/user"
     )
-    private val sampleImageDetailInDomain = ImageDomainModel(
+
+    private val sampleImageDetailFromDomain = ImageDomainModel(
         id = 1,
         pageURL = "https://example.com",
         type = "photo",
@@ -53,7 +56,7 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test2",
         userImageURL = "https://example.com/user"
     )
 
@@ -69,7 +72,7 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test3",
         userImageURL = "https://example.com/user",
         searchQuery = "red",
         createdAt = currentTimeInSeconds
@@ -95,13 +98,13 @@ class ImagesDataRepositoryTest {
     }
 
     @Test
-    fun `When fetchImages is called and local data is available and valid Then it returns list of ImageDataModelInDomain from local DB`() {
+    fun fetchImages_returnsLocalData_whenItIsValid() {
         runBlocking {
-            val expectedResult = listOf(sampleImageDetailInDomain)
-            val fetchTimestamp = currentTimeInSeconds - 100L // Timestamp within valid range
+            val expectedResult = listOf(sampleImageDetailFromDomain)
+            val fetchTimestamp = currentTimeInSeconds - 100L
 
             given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
-                .willReturn(listOf(sampleImageDetailInDomain) to fetchTimestamp)
+                .willReturn(listOf(sampleImageDetailFromDomain) to fetchTimestamp)
 
             val actualResult = repository.fetchImages(searchQuery)
 
@@ -110,13 +113,13 @@ class ImagesDataRepositoryTest {
     }
 
     @Test
-    fun `When fetchImages is called and local data is stale Then it fetches from remote and updates DB`() {
+    fun fetchImages_refreshesDataFromRemote_whenLocalDataIsStaleAndUpdatesDatabase() {
         runBlocking {
             val staleTimestamp = currentTimeInSeconds - FETCH_INTERVAL_IN_SECONDS - 100L
-            val expectedResult = listOf(sampleImageDetailInDomain)
+            val expectedResult = flowOf(Result.success(listOf(sampleImageDetailFromDomain)))
 
             given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
-                .willReturn(listOf(sampleImageDetailInDomain) to staleTimestamp)
+                .willReturn(listOf(sampleImageDetailFromDomain) to staleTimestamp)
 
             given(remoteImageDataSource.fetchImages(searchQuery))
                 .willReturn(expectedResult)
@@ -133,15 +136,15 @@ class ImagesDataRepositoryTest {
 
             val actualResult = repository.fetchImages(searchQuery)
 
-            assertEquals(expectedResult, actualResult)
+            assertEquals(expectedResult.firstOrNull()?.getOrNull(), actualResult)
             verify(localImageDataSource).removeImagesByQuery(searchQuery)
         }
     }
 
     @Test
-    fun `When fetchImages is called and no local data is found Then it fetches from remote`() {
+    fun fetchImages_fetchesDataFromRemote_whenNoLocalDataIsFound() {
         runBlocking {
-            val expectedResult = listOf(sampleImageDetailInDomain)
+            val expectedResult = flowOf(Result.success(listOf(sampleImageDetailFromDomain)))
 
             given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
                 .willReturn(emptyList<ImageDomainModel>() to 0L)
@@ -151,7 +154,7 @@ class ImagesDataRepositoryTest {
 
             val actualResult = repository.fetchImages(searchQuery)
 
-            assertEquals(expectedResult, actualResult)
+            assertEquals(expectedResult.firstOrNull()?.getOrNull(), actualResult)
         }
     }
 }
