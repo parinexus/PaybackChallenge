@@ -9,12 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.pixabay.challenge.R
-import com.pixabay.challenge.utils.TestTag
 
 @Composable
 fun EmptyStateView() {
@@ -24,9 +22,6 @@ fun EmptyStateView() {
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.padding_xlarge))
             .fillMaxSize()
-            .testTag(
-                TestTag.EMPTY_IMAGE_LIST_TAG
-            )
     ) {
         Text(
             text = stringResource(R.string.error_title),
