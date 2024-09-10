@@ -55,7 +55,7 @@ fun ImageDetailWarningContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_large))
                 .fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_small)))

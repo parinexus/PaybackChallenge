@@ -19,7 +19,7 @@ fun RetryAbleErrorView(message: String?, onTryAgain: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(dimensionResource(id = R.dimen.padding_large))
+            .padding(dimensionResource(id = R.dimen.padding_xlarge))
             .clickable { onTryAgain.invoke() }
     ) {
         Text(

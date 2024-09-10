@@ -173,7 +173,7 @@ private fun FullImageCard(imagePath: String) {
         modifier = Modifier
             .wrapContentWidth()
             .height(dimensionResource(id = R.dimen.image_height))
-            .padding(dimensionResource(id = R.dimen.padding_small))
+            .padding(dimensionResource(id = R.dimen.padding_standard))
             .background(MaterialTheme.colors.onPrimary, shape = MaterialTheme.shapes.medium)
             .testTag(LARGE_IMAGE_TAG)
     ) {

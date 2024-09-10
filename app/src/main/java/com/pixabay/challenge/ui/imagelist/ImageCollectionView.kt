@@ -22,7 +22,7 @@ fun ImageCollectionView(
     onCountryClick: (ImageUiModel) -> Unit
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_small)),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_standard)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small)),
         modifier = modifier.testTag(IMAGE_COLLECTION_TAG)
     ) {
