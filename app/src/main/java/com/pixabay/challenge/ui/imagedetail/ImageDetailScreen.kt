@@ -3,7 +3,6 @@ package com.pixabay.challenge.ui.imagedetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,11 +34,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.pixabay.challenge.R
-import com.pixabay.challenge.common.openBrowser
+import com.pixabay.challenge.utils.openBrowser
 import com.pixabay.challenge.ui.components.CustomImageView
 import com.pixabay.challenge.ui.imagelist.TagChipView
 import com.pixabay.challenge.ui.model.ImageUiModel
@@ -48,11 +45,10 @@ import com.pixabay.challenge.ui.model.ImageUiModel
 val DrawableId = SemanticsPropertyKey<Int>("DrawableResId")
 var SemanticsPropertyReceiver.drawableId by DrawableId
 
-@ExperimentalLayoutApi
 @Composable
 fun ImageInfoScreen(
     imageDetail: ImageUiModel,
-    navController: NavController
+    popBackStack: () -> Boolean
 ) {
     Scaffold(
         topBar = {
@@ -67,7 +63,7 @@ fun ImageInfoScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { popBackStack() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_navigation),
