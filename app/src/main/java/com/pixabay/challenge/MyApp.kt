@@ -3,15 +3,14 @@ package com.pixabay.challenge
 import android.app.Application
 import coil.Coil
 import coil.ImageLoader
-import coil.decode.SvgDecoder
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
 import dagger.hilt.android.HiltAndroidApp
-
+import javax.inject.Inject
 
 @HiltAndroidApp
 class MyApp : Application() {
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     override fun onCreate() {
         super.onCreate()
@@ -19,25 +18,6 @@ class MyApp : Application() {
     }
 
     private fun initCoil() {
-        Coil.setImageLoader(
-            ImageLoader.Builder(applicationContext)
-                .memoryCache {
-                    MemoryCache.Builder(applicationContext)
-                        .maxSizePercent(0.5)
-                        .build()
-                }
-                .diskCache {
-                    DiskCache.Builder()
-                        .directory(applicationContext.cacheDir.resolve("image_cache"))
-                        .maxSizePercent(0.5)
-                        .build()
-                }
-                .components {
-                    add(SvgDecoder.Factory())
-                }
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .diskCachePolicy(CachePolicy.ENABLED)
-                .build()
-        )
+        Coil.setImageLoader(imageLoader)
     }
 }
