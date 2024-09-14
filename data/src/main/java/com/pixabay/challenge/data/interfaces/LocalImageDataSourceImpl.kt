@@ -33,4 +33,8 @@ class LocalImageDataSourceImpl @Inject constructor(
             imageRepositoryDao.saveImages(it)
         }
     }
+
+    override suspend fun getLastUpdateTime(): Long {
+        return imageRepositoryDao.getLastUpdateTime() ?: 0L
+    }
 }

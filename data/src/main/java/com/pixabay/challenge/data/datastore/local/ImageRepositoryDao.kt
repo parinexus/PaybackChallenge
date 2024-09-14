@@ -18,4 +18,7 @@ interface ImageRepositoryDao {
 
     @Query("SELECT * FROM image_details WHERE searchQuery = :query")
     suspend fun fetchImagesByQueryWithTimestamps(query: String): List<ImageLocalModel>?
+
+    @Query("SELECT MAX(createdAt) FROM image_details")
+    suspend fun getLastUpdateTime(): Long?
 }

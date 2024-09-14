@@ -8,4 +8,5 @@ interface LocalImageDataSource {
     suspend fun fetchImages(query: String): List<ImageDomainModel>
     suspend fun removeImagesByQuery(query: String)
     suspend fun saveImages(images: List<ImageLocalModel>?)
+    suspend fun getLastUpdateTime(): Long
 }
