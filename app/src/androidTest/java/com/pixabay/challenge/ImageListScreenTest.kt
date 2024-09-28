@@ -1,9 +1,6 @@
 package com.pixabay.challenge
 
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
@@ -25,74 +22,47 @@ import com.pixabay.challenge.ui.imagelist.ImageCollectionView
 import com.pixabay.challenge.ui.imagelist.ImageThumbnailEntry
 import com.pixabay.challenge.utils.TestTag
 
-@ExperimentalLayoutApi
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
 @RunWith(AndroidJUnit4::class)
 class ImageListScreenTest {
 
     private val sampleImage1 = ImageUiModel(
-        id = 1,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "parisa",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage2 = ImageUiModel(
-        id = 2,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 12322,
         user = "mohammad",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage3 = ImageUiModel(
-        id = 3,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "reza",
-        userImageURL = "https://example.com/user"
     )
 
     private val sampleImage4 = ImageUiModel(
-        id = 4,
-        pageURL = "https://example.com",
-        type = "photo",
         tags = listOf("nature", "landscape"),
         previewURL = "https://example.com/preview",
-        webFormatURL = "https://example.com/webformat",
         largeImageURL = "https://example.com/large",
         downloads = "50",
         likes = "10",
         comments = "5",
-        userId = 123,
         user = "ali",
-        userImageURL = "https://example.com/user"
     )
 
     private val imageList = listOf(sampleImage1, sampleImage2, sampleImage3, sampleImage4)

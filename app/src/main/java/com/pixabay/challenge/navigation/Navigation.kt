@@ -1,9 +1,6 @@
 package com.pixabay.challenge.navigation
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,26 +9,29 @@ import com.pixabay.challenge.ui.imagedetail.ImageInfoScreen
 import com.pixabay.challenge.ui.imagelist.ImageListScreen
 import com.pixabay.challenge.ui.model.ImageUiModel
 
-@ExperimentalComposeUiApi
-@ExperimentalLayoutApi
-@ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = AppScreens.ImageListScreen.route) {
         composable(AppScreens.ImageListScreen.route) {
-            ImageListScreen(navController)
+            ImageListScreen(
+                navigateToImageDetail = { imageUiModel ->
+                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                        IMAGE_ID,
+                        imageUiModel
+                    )
+                    navController.navigate(AppScreens.ImageDetailScreen.route)
+                }
+            )
         }
-        composable(
-            AppScreens.ImageDetailScreen.route
-        ) {
+
+        composable(AppScreens.ImageDetailScreen.route) {
             val imageDetail =
-                navController.previousBackStackEntry?.savedStateHandle?.get<ImageUiModel>(
-                    IMAGE_ID
-                )
+                navController.previousBackStackEntry?.savedStateHandle?.get<ImageUiModel>(IMAGE_ID)
             imageDetail?.let {
-                ImageInfoScreen(it, navController)
+                ImageInfoScreen(imageDetail, popBackStack = {
+                    navController.popBackStack()
+                })
             }
         }
     }
 }
-

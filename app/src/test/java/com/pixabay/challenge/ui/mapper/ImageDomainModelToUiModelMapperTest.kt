@@ -28,23 +28,17 @@ class ImageDomainModelToUiModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123,
-            user = "johndoe",
+            user = "test1",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult1 = ImageUiModel(
-            id = 1,
-            pageURL = "https://example.com",
-            type = "photo",
             tags = listOf("nature", "landscape"),
             previewURL = "https://example.com/preview",
-            webFormatURL = "https://example.com/webformat",
             largeImageURL = "https://example.com/large",
             downloads = "50",
             likes = "10",
             comments = "5",
-            userId = 123,
-            user = "johndoe",
-            userImageURL = "https://example.com/user"
+            user = "test1",
         )
 
         private val input2 = ImageDomainModel(
@@ -59,23 +53,17 @@ class ImageDomainModelToUiModelMapperTest(
             likes = 10,
             comments = 5,
             userId = 123888,
-            user = "johndoe",
+            user = "test3",
             userImageURL = "https://example.com/user"
         )
         private val expectedResult2 = ImageUiModel(
-            id = 2,
-            pageURL = "https://example.com",
-            type = "Scenery",
             tags = listOf("nature", "landscape"),
             previewURL = "https://example.com/preview",
-            webFormatURL = "https://example.com/webformat",
             largeImageURL = "https://example.com/large",
             downloads = "50",
             likes = "10",
             comments = "5",
-            userId = 123888,
-            user = "johndoe",
-            userImageURL = "https://example.com/user"
+            user = "test3",
         )
 
         @JvmStatic
@@ -86,19 +74,17 @@ class ImageDomainModelToUiModelMapperTest(
         )
     }
 
-    private lateinit var classUnderTest: ImageDomainModelToUiModelMapper
+    private lateinit var imageDomainModelToUiModelMapper: ImageDomainModelToUiModelMapper
 
     @Before
     fun setup() {
-        classUnderTest = ImageDomainModelToUiModelMapper()
+        imageDomainModelToUiModelMapper = ImageDomainModelToUiModelMapper()
     }
 
     @Test
-    fun `Given domain model When mapped to UI model Then returns expected UI model`() {
-        // When
-        val actualResult = classUnderTest.toUi(input)
+    fun given_domainModel_then_returns_expectedUiModel() {
+        val actualResult = imageDomainModelToUiModelMapper.toUi(input)
 
-        // Then
         assertEquals(expectedResult, actualResult)
     }
 }

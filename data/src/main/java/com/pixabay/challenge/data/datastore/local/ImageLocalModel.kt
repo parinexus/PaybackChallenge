@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "image_details")
 data class ImageLocalModel(
     @PrimaryKey
-    val id: Long,
+    val id: Int,
     val searchQuery: String,
     val pageURL: String,
     val type: String,

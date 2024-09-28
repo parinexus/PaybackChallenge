@@ -4,24 +4,28 @@ import com.pixabay.challenge.data.datastore.local.ImageLocalModel
 import com.pixabay.challenge.data.datastore.local.ImageRepositoryDao
 import com.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
 import com.pixabay.challenge.domain.model.ImageDomainModel
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class LocalImageDataSourceImpl @Inject constructor(
+class LocalImageDataSourceImpl(
     private val imageRepositoryDao: ImageRepositoryDao,
     private val imageDbModelToDomainModelMapper: ImageDbModelToDomainModelMapper
 ) : LocalImageDataSource {
 
-    override suspend fun fetchImagesWithTimestamp(query: String): Pair<List<ImageDomainModel>, Long> {
-        val imagesWithTimestamps = imageRepositoryDao.fetchImagesByQueryWithTimestamps(query) ?: emptyList()
-        val domainModels = imagesWithTimestamps.map(imageDbModelToDomainModelMapper::toDomain)
-        val timestamp = imagesWithTimestamps.maxOfOrNull { it.createdAt } ?: 0L
-        return domainModels to timestamp
+    override fun fetchImagesWithTimestamp(query: String): Flow<Pair<List<ImageDomainModel>?, Long>> {
+        return imageRepositoryDao.fetchImagesByQueryWithTimestamps(query)
+            .map { imagesWithTimestamps ->
+                val domainModels = imagesWithTimestamps.map(imageDbModelToDomainModelMapper::toDomain)
+                val timestamp = imagesWithTimestamps.maxOfOrNull { it.createdAt } ?: 0L
+                domainModels to timestamp
+            }
     }
 
-    override suspend fun fetchImages(query: String): List<ImageDomainModel> {
+    override fun fetchImages(query: String): Flow<List<ImageDomainModel>> {
         return imageRepositoryDao.fetchImagesByQuery(query)
-            ?.map(imageDbModelToDomainModelMapper::toDomain)
-            ?: emptyList()
+            .map { images ->
+                images.map(imageDbModelToDomainModelMapper::toDomain)
+            }
     }
 
     override suspend fun removeImagesByQuery(query: String) {
@@ -32,5 +36,9 @@ class LocalImageDataSourceImpl @Inject constructor(
         images?.let {
             imageRepositoryDao.saveImages(it)
         }
+    }
+
+    override suspend fun getLastUpdateTime(): Long {
+        return imageRepositoryDao.getLastUpdateTime() ?: 0L
     }
 }

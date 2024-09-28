@@ -1,7 +1,6 @@
 package com.pixabay.challenge.ui.imagelist
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -10,23 +9,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-import com.pixabay.challenge.utils.TestTag.DETAIL_SCREEN_TAGS
+import com.pixabay.challenge.R
 
-@ExperimentalLayoutApi
 @Composable
 fun TagChipView(
     modifier: Modifier,
     tags: List<String>
 ) {
     FlowRow(
-        modifier = modifier.testTag(DETAIL_SCREEN_TAGS),
+        modifier = modifier,
         mainAxisAlignment = FlowMainAxisAlignment.Center,
-        mainAxisSpacing = 10.dp,
-        crossAxisSpacing = 10.dp
+        mainAxisSpacing = dimensionResource(id = R.dimen.spacing_small),
+        crossAxisSpacing = dimensionResource(id = R.dimen.spacing_small)
     ) {
         tags.forEach { tag ->
             Text(
@@ -34,9 +31,12 @@ fun TagChipView(
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .background(color = MaterialTheme.colors.secondary, shape = CircleShape)
-                    .padding(vertical = 3.dp, horizontal = 8.dp)
+                    .padding(
+                        vertical = dimensionResource(id = R.dimen.padding_vertical_chip),
+                        horizontal = dimensionResource(id = R.dimen.padding_horizontal_chip)
+                    )
             )
         }
-        Spacer(modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.spacing_tiny)))
     }
 }

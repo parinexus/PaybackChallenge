@@ -9,18 +9,20 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import com.pixabay.challenge.data.datastore.local.ImageLocalModel
-import com.pixabay.challenge.data.datastore.local.ImageRepositoryDao
-import com.pixabay.challenge.data.datastore.remote.ImageApiService
-import com.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
+import com.pixabay.challenge.data.interfaces.LocalImageDataSource
+import com.pixabay.challenge.data.interfaces.RemoteImageDataSource
 import com.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
-import com.pixabay.challenge.data.mapper.ImageNetworkModelToDomainModelMapper
 import com.pixabay.challenge.data.mapper.MapperInput
 import com.pixabay.challenge.data.model.ImageRemoteModel
-import com.pixabay.challenge.data.model.ImagesResponse
 import com.pixabay.challenge.data.repository.ImagesDataRepository
 import com.pixabay.challenge.domain.model.ImageDomainModel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
+import org.mockito.Mockito.verify
 
-@RunWith(MockitoJUnitRunner::class)
+private const val FETCH_INTERVAL_IN_SECONDS: Int = 24 * 60 * 60
+
+@RunWith(MockitoJUnitRunner.Silent::class)
 class ImagesDataRepositoryTest {
 
     private val searchQuery = "blue"
@@ -38,10 +40,11 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test1",
         userImageURL = "https://example.com/user"
     )
-    private val sampleImageDetailInDomain = ImageDomainModel(
+
+    private val sampleImageDetailFromDomain = ImageDomainModel(
         id = 1,
         pageURL = "https://example.com",
         type = "photo",
@@ -53,7 +56,7 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test2",
         userImageURL = "https://example.com/user"
     )
 
@@ -69,50 +72,39 @@ class ImagesDataRepositoryTest {
         likes = 10,
         comments = 5,
         userId = 123,
-        user = "johndoe",
+        user = "test3",
         userImageURL = "https://example.com/user",
         searchQuery = "red",
         createdAt = currentTimeInSeconds
     )
 
     @Mock
-    lateinit var apiService: ImageApiService
-
-    @Mock
-    lateinit var repositoryDao: ImageRepositoryDao
-
-    @Mock
-    lateinit var networkToDomainMapper: ImageNetworkModelToDomainModelMapper
-
-    @Mock
     lateinit var networkToDbMapper: ImageNetworkModelToDbModelMapper
 
     @Mock
-    lateinit var dbToDomainMapper: ImageDbModelToDomainModelMapper
+    lateinit var localImageDataSource: LocalImageDataSource
+
+    @Mock
+    lateinit var remoteImageDataSource: RemoteImageDataSource
 
     private lateinit var repository: ImagesDataRepository
 
     @Before
     fun setup() {
         repository = ImagesDataRepository(
-            imageApiService = apiService,
-            imageRepositoryDao = repositoryDao,
-            imageNetworkModelToDomainModelMapper = networkToDomainMapper,
-            imageNetworkModelToDbModelMapper = networkToDbMapper,
-            imageDbModelToDomainModelMapper = dbToDomainMapper
+            localImageDataSource = localImageDataSource,
+            remoteImageDataSource = remoteImageDataSource,
         )
     }
 
     @Test
-    fun `When fetchImages is called Then it returns list of ImageDataModelInDomain from local DB`() {
+    fun fetchImages_returnsLocalData_whenItIsValid() {
         runBlocking {
-            val expectedResult = listOf(sampleImageDetailInDomain)
+            val expectedResult = listOf(sampleImageDetailFromDomain)
+            val fetchTimestamp = currentTimeInSeconds - 100L
 
-            given(repositoryDao.fetchImagesByQuery(searchQuery))
-                .willReturn(listOf(sampleImageDetailFromDb))
-
-            given(dbToDomainMapper.toDomain(sampleImageDetailFromDb))
-                .willReturn(sampleImageDetailInDomain)
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(listOf(sampleImageDetailFromDomain) to fetchTimestamp)
 
             val actualResult = repository.fetchImages(searchQuery)
 
@@ -121,18 +113,16 @@ class ImagesDataRepositoryTest {
     }
 
     @Test
-    fun `When fetchImages is called Then it returns list of ImageDataModelInDomain from remote source`() {
+    fun fetchImages_refreshesDataFromRemote_whenLocalDataIsStaleAndUpdatesDatabase() {
         runBlocking {
-            val expectedResult = listOf(sampleImageDetailInDomain)
+            val staleTimestamp = currentTimeInSeconds - FETCH_INTERVAL_IN_SECONDS - 100L
+            val expectedResult = flowOf(Result.success(listOf(sampleImageDetailFromDomain)))
 
-            given(repositoryDao.fetchImagesByQuery(searchQuery))
-                .willReturn(emptyList())
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(listOf(sampleImageDetailFromDomain) to staleTimestamp)
 
-            given(apiService.fetchImages(query = searchQuery))
-                .willReturn(ImagesResponse(images = listOf(sampleImageDetailFromApi)))
-
-            given(networkToDomainMapper.toDomain(sampleImageDetailFromApi))
-                .willReturn(sampleImageDetailInDomain)
+            given(remoteImageDataSource.fetchImages(searchQuery))
+                .willReturn(expectedResult)
 
             given(
                 networkToDbMapper.toDatabase(
@@ -146,7 +136,25 @@ class ImagesDataRepositoryTest {
 
             val actualResult = repository.fetchImages(searchQuery)
 
-            assertEquals(expectedResult, actualResult)
+            assertEquals(expectedResult.firstOrNull()?.getOrNull(), actualResult)
+            verify(localImageDataSource).removeImagesByQuery(searchQuery)
+        }
+    }
+
+    @Test
+    fun fetchImages_fetchesDataFromRemote_whenNoLocalDataIsFound() {
+        runBlocking {
+            val expectedResult = flowOf(Result.success(listOf(sampleImageDetailFromDomain)))
+
+            given(localImageDataSource.fetchImagesWithTimestamp(searchQuery))
+                .willReturn(emptyList<ImageDomainModel>() to 0L)
+
+            given(remoteImageDataSource.fetchImages(searchQuery))
+                .willReturn(expectedResult)
+
+            val actualResult = repository.fetchImages(searchQuery)
+
+            assertEquals(expectedResult.firstOrNull()?.getOrNull(), actualResult)
         }
     }
 }

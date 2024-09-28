@@ -9,19 +9,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.pixabay.challenge.R
-import com.pixabay.challenge.utils.TestTag.EMPTY_IMAGE_LIST_TAG
 
 @Composable
 fun EmptyStateView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(50.dp).fillMaxSize().testTag(EMPTY_IMAGE_LIST_TAG)
+        modifier = Modifier
+            .padding(dimensionResource(id = R.dimen.padding_xlarge))
+            .fillMaxSize()
     ) {
         Text(
             text = stringResource(R.string.error_title),
