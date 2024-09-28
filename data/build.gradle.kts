@@ -2,6 +2,7 @@ plugins {
     id(libs.plugins.android.library.get().toString())
     id(libs.plugins.kotlin.android.get().toString())
     id(libs.plugins.kapt.get().toString())
+    id(libs.plugins.google.hilt.get().toString())
 }
 
 android {
@@ -36,13 +37,12 @@ dependencies {
 
     // Storage (Room)
     implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
     kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.google.hilt.compiler)
-    kapt(libs.android.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     // Coroutines
     implementation(libs.coroutines.android)
