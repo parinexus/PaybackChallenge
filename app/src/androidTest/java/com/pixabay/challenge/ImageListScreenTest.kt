@@ -1,9 +1,6 @@
 package com.pixabay.challenge
 
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
@@ -25,9 +22,6 @@ import com.pixabay.challenge.ui.imagelist.ImageCollectionView
 import com.pixabay.challenge.ui.imagelist.ImageThumbnailEntry
 import com.pixabay.challenge.utils.TestTag
 
-@ExperimentalLayoutApi
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
 @RunWith(AndroidJUnit4::class)
 class ImageListScreenTest {
 

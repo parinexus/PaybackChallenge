@@ -35,14 +35,10 @@ object DataSourceModule {
     @Singleton
     fun provideRemoteImageDataSource(
         imageApiService: ImageApiService,
-        localImageDataSource: LocalImageDataSource,
-        imageNetworkModelToDomainModelMapper: ImageNetworkModelToDomainModelMapper,
         imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper
     ): RemoteImageDataSource {
         return RemoteImageDataSourceImpl(
             imageApiService = imageApiService,
-            localImageDataSource = localImageDataSource,
-            imageNetworkModelToDomainModelMapper = imageNetworkModelToDomainModelMapper,
             imageNetworkModelToDbModelMapper = imageNetworkModelToDbModelMapper
         )
     }

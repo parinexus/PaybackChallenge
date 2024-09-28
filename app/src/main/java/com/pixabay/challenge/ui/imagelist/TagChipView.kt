@@ -1,7 +1,6 @@
 package com.pixabay.challenge.ui.imagelist
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,7 +14,6 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.pixabay.challenge.R
 
-@ExperimentalLayoutApi
 @Composable
 fun TagChipView(
     modifier: Modifier,

@@ -3,6 +3,7 @@ plugins {
     id(libs.plugins.kotlin.android.get().toString())
     id(libs.plugins.hilt.android.plugin.get().toString())
     id(libs.plugins.kotlin.parcelize.get().toString())
+    id(libs.plugins.google.hilt.get().toString())
     id(libs.plugins.kapt.get().toString())
 }
 
@@ -81,8 +82,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    kapt(libs.google.hilt.compiler)
-    kapt(libs.android.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     // Coroutines
     implementation(libs.coroutines.android)

@@ -19,13 +19,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import com.pixabay.challenge.R
-import com.pixabay.challenge.viewmodel.INITIAL_SEARCH_QUERY
+import com.pixabay.challenge.utils.UiConstants
 
 @Composable
 fun QueryInputField(
     onSearch: (searchQuery: String) -> Unit
 ) {
-    val searchText = remember { mutableStateOf(INITIAL_SEARCH_QUERY) }
+    val searchText = remember { mutableStateOf(UiConstants.DEFAULT_SEARCH_QUERY) }
     val context = LocalContext.current
 
     TextField(

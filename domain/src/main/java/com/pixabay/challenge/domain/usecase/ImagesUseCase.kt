@@ -10,17 +10,18 @@ import javax.inject.Inject
 class ImagesUseCase @Inject constructor(
     private val imagesRepository: ImageRepository,
 ) {
-    operator fun invoke(query: String): Flow<ResultModel<List<ImageDomainModel>>> =
-        flow {
-            runCatching { imagesRepository.fetchImages(query) }
-                .onSuccess { images ->
-                    if (images.isEmpty()) {
-                        emit(ResultModel.Error("No images found for the query: $query"))
-                    } else {
-                        emit(ResultModel.Success(images))
-                    }
-                }.onFailure { e ->
-                    emit(ResultModel.Error(e.localizedMessage))
+    operator fun invoke(query: String): Flow<ResultModel<List<ImageDomainModel>>> = flow {
+        runCatching { imagesRepository.fetchImages(query) }
+            .onSuccess { result ->
+                if (result.data.isNullOrEmpty()) {
+                    emit(ResultModel.Error("No images found for the query: $query"))
+                } else {
+                    emit(result)
                 }
-        }
+                emit(result)
+            }
+            .onFailure { e ->
+                emit(ResultModel.Error(e.localizedMessage))
+            }
+    }
 }

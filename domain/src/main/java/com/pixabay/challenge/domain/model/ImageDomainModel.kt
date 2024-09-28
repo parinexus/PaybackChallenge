@@ -1,7 +1,7 @@
 package com.pixabay.challenge.domain.model
 
 data class ImageDomainModel(
-    val id: Long,
+    val id: Int,
     val pageURL: String,
     val type: String,
     val tags: String,

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ImageRemoteModel(
     @SerializedName("id")
-    val id: Long?,
+    val id: Int,
     @SerializedName("pageURL")
     val pageURL: String?,
     @SerializedName("type")
