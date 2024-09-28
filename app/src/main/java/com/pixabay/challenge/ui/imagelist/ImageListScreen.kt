@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pixabay.challenge.R
 import com.pixabay.challenge.contract.ImageUiEvent
 import com.pixabay.challenge.contract.ImageUiState
+import com.pixabay.challenge.ui.components.EmptyStateView
 import com.pixabay.challenge.viewmodel.ImagesViewModel
 import com.pixabay.challenge.ui.components.QueryInputField
 import com.pixabay.challenge.ui.components.RetryAbleErrorView
@@ -110,17 +111,17 @@ private fun MainContent(
             }
         }
 
-//        viewState.images.isEmpty() -> {
-//            EmptyStateView()
-//        }
+        viewState.images.isEmpty() -> {
+            EmptyStateView()
+        }
 
         else -> {
-//            ImageCollectionView(
-//                modifier = Modifier,
-//                list = viewState.images
-//            ) { imageData ->
-//                actions.showDialog(true, imageData)
-//            }
+            ImageCollectionView(
+                modifier = Modifier,
+                list = viewState.images
+            ) { imageData ->
+                actions.showDialog(true, imageData)
+            }
         }
     }
 
