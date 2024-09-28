@@ -3,9 +3,8 @@ package com.pixabay.challenge.mapper
 import com.pixabay.challenge.common.format
 import com.pixabay.challenge.domain.model.ImageDomainModel
 import com.pixabay.challenge.ui.model.ImageUiModel
-import javax.inject.Inject
 
-class ImageDomainModelToUiModelMapper @Inject constructor() :
+class ImageDomainModelToUiModelMapper :
     DomainToUiMapper<ImageDomainModel, ImageUiModel>() {
     public override fun map(input: ImageDomainModel) = ImageUiModel(
         tags = input.tags.splitTags(),

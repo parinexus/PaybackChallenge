@@ -7,11 +7,10 @@ import com.pixabay.challenge.domain.model.ImageDomainModel
 import com.pixabay.challenge.domain.repository.ImageRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import javax.inject.Inject
 
 private const val FETCH_INTERVAL_IN_SECONDS: Int = 24 * 60 * 60
 
-class ImagesDataRepository @Inject constructor(
+class ImagesDataRepository(
     private val localImageDataSource: LocalImageDataSource,
     private val remoteImageDataSource: RemoteImageDataSource,
 ) : ImageRepository {

@@ -6,9 +6,8 @@ import com.pixabay.challenge.data.mapper.ImageDbModelToDomainModelMapper
 import com.pixabay.challenge.domain.model.ImageDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class LocalImageDataSourceImpl @Inject constructor(
+class LocalImageDataSourceImpl(
     private val imageRepositoryDao: ImageRepositoryDao,
     private val imageDbModelToDomainModelMapper: ImageDbModelToDomainModelMapper
 ) : LocalImageDataSource {

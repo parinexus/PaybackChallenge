@@ -7,9 +7,8 @@ import com.pixabay.challenge.data.mapper.ImageNetworkModelToDbModelMapper
 import com.pixabay.challenge.data.mapper.MapperInput
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class RemoteImageDataSourceImpl @Inject constructor(
+class RemoteImageDataSourceImpl(
     private val imageApiService: ImageApiService,
     private val imageNetworkModelToDbModelMapper: ImageNetworkModelToDbModelMapper
 ) : RemoteImageDataSource {
