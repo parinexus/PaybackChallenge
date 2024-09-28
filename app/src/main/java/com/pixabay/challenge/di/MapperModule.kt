@@ -13,22 +13,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class MapperModule {
-    @Singleton
     @Provides
     fun provideImageNetworkModelToDomainModelMapper(): ImageNetworkModelToDomainModelMapper =
         ImageNetworkModelToDomainModelMapper()
 
-    @Singleton
     @Provides
     fun provideImageDomainModelToUiModelMapper(): ImageDomainModelToUiModelMapper =
         ImageDomainModelToUiModelMapper()
 
-    @Singleton
     @Provides
     fun provideImageDbModelToDomainModelMapper(): ImageDbModelToDomainModelMapper =
         ImageDbModelToDomainModelMapper()
 
-    @Singleton
     @Provides
     fun provideImageNetworkModelToDbModelMapper(): ImageNetworkModelToDbModelMapper =
         ImageNetworkModelToDbModelMapper()
